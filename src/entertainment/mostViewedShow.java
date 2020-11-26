@@ -26,10 +26,9 @@ public class mostViewedShow {
 
     public JSONObject execute(Writer fileWriter) throws IOException {
         viewShows();
-        if (sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if (sortType.equals("desc")) {
+            Collections.reverse(shows);
         }
         return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
@@ -48,22 +47,6 @@ public class mostViewedShow {
 
         Collections.sort(shows, comparator);
     }
-
-    private void descsort() {
-        Comparator<Show> comparator = new Comparator<Show>() {
-            @Override
-            public int compare(final Show s1, final Show s2) {
-                if (s1.getViews() != s2.getViews()) {
-                    return Integer.compare(s2.getViews(), s1.getViews());
-                } else {
-                    return s2.getTitle().compareTo(s1.getTitle());
-                }
-            }
-        };
-
-        Collections.sort(shows, comparator);
-    }
-
     private List<String> filter() {
         int limit = 1;
 

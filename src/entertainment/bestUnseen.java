@@ -7,22 +7,16 @@ import java.io.IOException;
 import java.util.*;
 
 public class bestUnseen {
-    private final List<Show> shows;
-    private final List<Movie> movies;
     private final int id;
     private final List<User> users;
     private final String username;
     private List<Video> videos;
 
-    public bestUnseen(List<Show> shows, List<Movie> movies, int id, List<User> users, String username) {
-        this.shows = shows;
-        this.movies = movies;
+    public bestUnseen(List<Video> videos, int id, List<User> users, String username) {
         this.id = id;
         this.users = users;
         this.username = username;
-        videos = new ArrayList<Video>();
-        videos.addAll(movies);
-        videos.addAll(shows);
+        this.videos = videos;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         descSort();
@@ -30,7 +24,8 @@ public class bestUnseen {
         for(Video v : videos) {
             if(!user.getHistory().containsKey(v.getTitle())) {
 
-                return fileWriter.writeFile(id, null, "BestRatedUnseenRecommendation result: " + v.getTitle());
+                return fileWriter.writeFile(id, null, "BestRatedUnseenRecommendation result: "
+                                            + v.getTitle());
             }
         }
         return fileWriter.writeFile(id, null, "BestRatedUnseenRecommendation cannot be applied!");
@@ -46,11 +41,7 @@ public class bestUnseen {
                 }
             }
         };
-
         Collections.sort(videos, comparator);
-//        for(Video v : videos) {
-//            System.out.println(v.getTitle() + "   " + v.calcAvg());
-//        }
     }
     private User searchUser(String username) {
         for(User u : users) {

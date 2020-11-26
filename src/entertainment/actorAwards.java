@@ -10,9 +10,9 @@ import java.util.*;
 public class actorAwards {
     private final List<Actor> actors;
     private final List<String> awards;
-    private final List<Actor> filteredActors = new ArrayList<Actor>();
     private final int id;
     private final String sortType;
+    private final List<Actor> filteredActors = new ArrayList<Actor>();
 
     public  actorAwards(List<Actor> actors, List<String> awards, int id, String sortType) {
         this.actors = actors;
@@ -22,17 +22,12 @@ public class actorAwards {
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         setFilteredActors();
-        List<String> actorsToPrint = new ArrayList<String>();
+        ascsort();
 
-        if (sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        if (sortType.equals("desc")) {
+            Collections.reverse(filteredActors);
         }
-        for(Actor a : filteredActors) {
-            actorsToPrint.add(a.getName());
-        }
-        return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint);
+        return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
     }
     private void setFilteredActors() {
         for(Actor a : actors) {
@@ -42,7 +37,7 @@ public class actorAwards {
             }
         }
     }
-    private boolean findAwards( Actor actor) {
+    private boolean findAwards(Actor actor) {
         for(String award : awards) {
             boolean found = false;
             for(Map.Entry<ActorsAwards, Integer> entry : actor.getAwards().entrySet()) {
@@ -65,25 +60,13 @@ public class actorAwards {
                 }
             }
         };
-
-
         Collections.sort(filteredActors, comparator);
-        for(Actor a:filteredActors) {
-            System.out.println(a.getName() + "  " + a.getAwardsNumber());
-        }
     }
-    private void descsort() {
-        Comparator<Actor> comparator = new Comparator<Actor>() {
-            @Override
-            public int compare(final Actor a1, final Actor a2) {
-                if (a1.getAwardsNumber() != a2.getAwardsNumber()) {
-                    return Integer.compare(a2.getAwardsNumber(), a1.getAwardsNumber());
-                } else {
-                    return a2.getName().compareTo(a1.getName());
-                }
-            }
-        };
-
-        Collections.sort(filteredActors, comparator);
+    private List<String> actorsToPrint() {
+        List<String> actorsToPrint = new ArrayList<String>();
+        for(Actor a : filteredActors) {
+            actorsToPrint.add(a.getName());
+        }
+        return actorsToPrint;
     }
 }

@@ -25,10 +25,9 @@ public class longestMovie {
         this.sortType = sortType;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
-        if(sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if(sortType.equals("desc")) {
+            Collections.reverse(movies);
         }
         return fileWriter.writeFile(id, null,"Query result: " + filter());
     }
@@ -45,19 +44,6 @@ public class longestMovie {
         };
         Collections.sort(movies, comparator);
 
-    }
-    private void descsort() {
-        Comparator<Movie> comparator = new Comparator<Movie>(){
-            @Override
-            public int compare(final Movie m1, final Movie m2){
-                if(m1.getDuration() != m2.getDuration()){
-                    return Integer.compare( m2.getDuration(), m1.getDuration());
-                } else {
-                    return m2.getTitle().compareTo(m1.getTitle());
-                }
-            }
-        };
-        Collections.sort(movies, comparator);
     }
     private List<String> filter() {
         int limit = 1;

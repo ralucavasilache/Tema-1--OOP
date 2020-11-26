@@ -49,13 +49,13 @@ public class Command {
 
     private JSONObject favorite () throws IOException {
         User u = searchUser();
-        JSONObject out = out = u.Favorite(this.title, fileWriter, this.id);
+        JSONObject out = u.Favorite(this.title, fileWriter, this.id);
         return out;
     }
 
     private JSONObject view () throws IOException {
         User u = searchUser();
-        JSONObject out = out = u.View(this.title, fileWriter, this.id);
+        JSONObject out = u.View(this.title, fileWriter, this.id);
         return out;
     }
 
@@ -70,10 +70,8 @@ public class Command {
         }
         else if (searchShow() != null) {
             Show s = searchShow();
-            System.out.println("srchshow");
             out = u.setShowRating(s, rating, fileWriter, seasonNo, id);
         }
-
         return out;
     }
 

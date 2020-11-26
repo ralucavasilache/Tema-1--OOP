@@ -26,10 +26,9 @@ public class longestShow {
     }
 
     public JSONObject execute(Writer fileWriter) throws IOException {
-        if (sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if (sortType.equals("desc")) {
+            Collections.reverse(shows);
         }
         return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
@@ -46,27 +45,6 @@ public class longestShow {
             }
         };
         Collections.sort(shows, comparator);
-//        for(Show m : shows)
-//            System.out.println(m.getTitle() +"   " + m.calcAvg());
-        //sortasea aici e doar cresc atoate !
-    }
-
-    private void descsort() {
-        Comparator<Show> comparator = new Comparator<Show>() {
-            @Override
-            public int compare(final Show s1, final Show s2) {
-                if (s1.getDuration() != s2.getDuration()) {
-                    return Double.compare(s2.getDuration(), s1.getDuration());
-                } else {
-                    return s2.getTitle().compareTo(s1.getTitle());
-                }
-            }
-        };
-        System.out.println(id + " ----------- " );
-        Collections.sort(shows, comparator);
-        for(Show m : shows)
-            System.out.println(m.getTitle() +"   " + m.calcAvg());
-        System.out.println(id + " ----------------------- " );
     }
 
     private List<String> filter() {

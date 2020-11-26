@@ -3,10 +3,14 @@ package utils;
 import actor.ActorsAwards;
 import common.Constants;
 import entertainment.Genre;
+import entertainment.Movie;
+import entertainment.Show;
+import entertainment.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
@@ -123,4 +127,5 @@ public final class Utils {
 
         return mapVideos;
     }
+
 }

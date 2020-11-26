@@ -8,21 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class standard {
-    private final List<Show> shows;
-    private final List<Movie> movies;
     private final int id;
     private final List<User> users;
     private final String username;
     private List<Video> videos;
-    public standard(List<Show> shows, List<Movie> movies, int id, List<User> users, String username) {
-        this.shows = shows;
-        this.movies = movies;
+
+    public standard(List<Video> videos, int id, List<User> users, String username) {
+        this.videos = videos;
         this.id = id;
         this.users = users;
         this.username = username;
-        videos = new ArrayList<Video>();
-        videos.addAll(movies);
-        videos.addAll(shows);
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         User user = searchUser(username);

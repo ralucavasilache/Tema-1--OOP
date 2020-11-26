@@ -28,22 +28,6 @@ public class User {
         this.shows = shows;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public Map<String, Integer> getHistory() {
-        return history;
-    }
-
-    public String getSubscriptionType() {
-        return subscriptionType;
-    }
-
-    public ArrayList<String> getFavoriteMovies() {
-        return favoriteMovies;
-    }
-
     public JSONObject Favorite(String video, Writer fileWriter, int id) throws IOException {
         JSONObject out = null;
         if(history.containsKey(video) && !favoriteMovies.contains(video)) {
@@ -63,7 +47,6 @@ public class User {
         JSONObject out = null;
         if(!history.containsKey(video)) {
             history.put(video, 1);
-
         }
         else {
             history.put(video, history.get(video) + 1);
@@ -73,40 +56,30 @@ public class User {
         return out;
     }
 
-    public int getRatingsNo() {
-        return ratingsNo;
-    }
-
     public JSONObject setMovieRating(Movie movie, double rating, Writer fileWriter, int id) throws IOException {
         JSONObject out = null;
         if(history.containsKey(movie.getTitle())) {
-            //verifica map ratings din movie
             if(!movie.getRating().containsKey(username)) {
                 movie.setRating(rating, username);
                 ratingsNo++;
-                return fileWriter.writeFile(id, null, "success -> " + movie.getTitle() + " was rated with "
-                                            + rating + " by " + this.getUsername());
+                return fileWriter.writeFile(id, null, "success -> " + movie.getTitle() +
+                                            " was rated with " + rating + " by " + username);
             } else if(movie.getRating().containsKey(username)) {
                 out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle()
                                             + " has been already rated");
             }
         } else if(!history.containsKey(movie.getTitle())) {
-//            System.out.println(id + "--------" + movie.getTitle());
             out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle() + " is not seen");
-            if(out != null) {
-//                System.out.println("Nu este null");
-            }
         }
         return out;
     }
     public JSONObject setShowRating(Show show, double rating, Writer fileWriter, int season, int id) throws IOException {
         JSONObject out = null;
         if(history.containsKey(show.getTitle())) {
-            //System.out.println(show);
             if (!show.getSeasons().get(season - 1).getRatings().containsKey(username)) {
                 show.setRating(rating, season, username);
                 out = fileWriter.writeFile(id, null, "success -> " + show.getTitle() + " was rated with "
-                                            + rating + " by " + this.getUsername());
+                                            + rating + " by " + username);
                 ratingsNo++;
             } else {
                 return fileWriter.writeFile(id, null, "error -> " + show.getTitle()
@@ -117,7 +90,25 @@ public class User {
         }
         return out;
     }
+    public String getUsername() {
+        return username;
+    }
 
+    public Map<String, Integer> getHistory() {
+        return history;
+    }
+
+    public String getSubscriptionType() {
+        return subscriptionType;
+    }
+
+    public ArrayList<String> getFavoriteMovies() {
+        return favoriteMovies;
+    }
+
+    public int getRatingsNo() {
+        return ratingsNo;
+    }
     @Override
     public String toString() {
         return "User{" +

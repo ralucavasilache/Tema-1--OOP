@@ -25,10 +25,9 @@ public class ratingShow {
         this.sortType = sortType;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
-        if(sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if(sortType.equals("desc")) {
+            Collections.reverse(shows);
         }
         return fileWriter.writeFile(id, null,"Query result: " + filter());
     }
@@ -46,20 +45,6 @@ public class ratingShow {
         };
         Collections.sort(shows, comparator);
     }
-    private void descsort() {
-        Comparator<Show> comparator = new Comparator<Show>(){
-            @Override
-            public int compare(final Show s1, final Show s2){
-                if(s1.calcAvg() != s2.calcAvg()){
-                    return Double.compare( s2.calcAvg(), s2.calcAvg());
-                }else{
-                    return 0;
-                }
-            }
-        };
-        Collections.sort(shows, comparator);
-    }
-
     private List<String> filter() {
         int limit = 1;
 

@@ -23,17 +23,14 @@ public class favoriteMovies {
         this.sortType = sortType;
         this.users = users;
     }
-
     public JSONObject execute(Writer fileWriter) throws IOException {
         addToFavorite();
-        if (sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if (sortType.equals("desc")) {
+            Collections.reverse(movies);
         }
         return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
-
     private void ascsort() {
         Comparator<Movie> comparator = new Comparator<Movie>() {
             @Override
@@ -45,25 +42,8 @@ public class favoriteMovies {
                 }
             }
         };
-
         Collections.sort(movies, comparator);
     }
-
-    private void descsort() {
-        Comparator<Movie> comparator = new Comparator<Movie>() {
-            @Override
-            public int compare(final Movie m1, final Movie m2) {
-                if (m1.getFavorite() != m2.getFavorite()) {
-                    return Integer.compare(m2.getFavorite(), m1.getFavorite());
-                } else {
-                    return m2.getTitle().compareTo(m1.getTitle());
-                }
-            }
-        };
-
-        Collections.sort(movies, comparator);
-    }
-
     private List<String> filter() {
         int limit = 1;
 

@@ -20,7 +20,8 @@ public class averageActors {
     private final String sortType;
     private final int id;
 
-    public averageActors(List<Actor> actors, String type, List<Movie> movies, List<Show> shows, int number, String sortType, int id) {
+    public averageActors(List<Actor> actors, String type, List<Movie> movies, List<Show> shows,
+                         int number, String sortType, int id) {
         this.actors = actors;
         this.objType = type;
         this.movies = movies;
@@ -30,29 +31,26 @@ public class averageActors {
         this.id = id;
 
     }
-
     public JSONObject execute(Writer fileWriter) throws IOException {
             parsingFilms();
             calcAvg();
-            if(sortType.equals("asc")) {
-                ascSort();
-            } else {
-                descSort();
+            ascSort();
+            if(sortType.equals("desc")){
+                Collections.reverse(actors);
             }
-            int limit = 1;
-
-            List<String> sortedActors = new ArrayList<String>();
-            for(Actor a : actors) {
-                if(a.getRating() != 0 && limit <= number) {
-//                    System.out.println("  id : " + id+ "   " + a.getName() + " rating: "+ + a.getRating());
-                    sortedActors.add(a.getName());
-                    limit++;
-
-                }
-            }
-            return fileWriter.writeFile(id, null, "Query result: " + sortedActors);
+            return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
     }
-
+    private List<String> actorsToPrint() {
+        int limit = 1;
+        List<String> sortedActors = new ArrayList<String>();
+        for(Actor a : actors) {
+            if(a.getRating() != 0 && limit <= number) {
+                sortedActors.add(a.getName());
+                limit++;
+            }
+        }
+        return sortedActors;
+    }
     public void parsingFilms() {
         for(Actor a: actors) {
             actorMovies = new ArrayList<>();
@@ -75,17 +73,13 @@ public class averageActors {
                     }
                 }
             }
-            //System.out.println(a.getName() +":  " + actorMovies);
-            //System.out.println(":  " + actorShows);
             a.setMovies(actorMovies);
             a.setShows(actorShows);
         }
     }
-
     private void calcAvg() {
         for(Actor a: actors) {
             a.calculateRating();
-            //System.out.println(a.getName() + " " + a.getRating());
         }
     }
     private void ascSort() {
@@ -100,26 +94,5 @@ public class averageActors {
             }
         };
         Collections.sort(actors, comparator);
-        //sortasea aici e doar cresc atoate !
-        for(Actor a: actors) {
-            //System.out.println("**" + a.getName() + " " + a.getRating());
-        }
-    }
-    private void descSort() {
-        Comparator<Actor> comparator = new Comparator<Actor>(){
-            @Override
-            public int compare(final Actor a1, final Actor a2){
-                if(a1.getRating() != a2.getRating()){
-                    return Double.compare( a2.getRating(), a1.getRating());
-                }else{
-                    return a2.getName().compareTo(a1.getName());
-                }
-            }
-        };
-        Collections.sort(actors, comparator);
-        //sortasea aici e doar cresc atoate !
-        for(Actor a: actors) {
-            //System.out.println("**" + a.getName() + " " + a.getRating());
-        }
     }
 }

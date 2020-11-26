@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class searchPremium {
-    private final List<Show> shows;
-    private final List<Movie> movies;
     private final int id;
     private final List<User> users;
     private final String username;
@@ -19,19 +17,15 @@ public class searchPremium {
     private final String filtre;
     private List<Video> filtredVideos = new ArrayList<Video>();
 
-    public searchPremium(List<Show> shows, List<Movie> movies, int id, List<User> users, String username, String filtre) {
-        this.shows = shows;
-        this.movies = movies;
+    public searchPremium(List<Video> videos, int id, List<User> users, String username, String filtre) {
         this.id = id;
         this.users = users;
         this.username = username;
         this.filtre = filtre;
-        videos = new ArrayList<Video>();
-        videos.addAll(movies);
-        videos.addAll(shows);
+        this.videos = videos;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
-        filtrebyGenre(filtre);
+        filtreByGenre(filtre);
 
         User user = searchUser(username);
 
@@ -40,16 +34,12 @@ public class searchPremium {
             List<String> videostoprint = new ArrayList<String>();
             for(Video v  : filtredVideos) {
                 videostoprint.add(v.getTitle());
-                System.out.println("**" + v.getTitle());
             }
-            System.out.println("**" );
-
             return fileWriter.writeFile(id, null, "SearchRecommendation result: " + videostoprint);
         } else {
             return fileWriter.writeFile(id, null, "SearchRecommendation cannot be applied!");
 
         }
-            //return fileWriter.writeFile(id, null, "FavoriteRecommendation  cannot be applied");
     }
     private User searchUser(String username) {
         for(User u : users) {
@@ -59,15 +49,7 @@ public class searchPremium {
         }
         return null;
     }
-    public Video searchVideo(String title) {
-        for(Video v : videos) {
-            if(v.getTitle().equals(title)) {
-                return v;
-            }
-        }
-        return null;
-    }
-    private void filtrebyGenre (String genre) {
+    private void filtreByGenre (String genre) {
 
         User user = searchUser(username);
         for(Video v : videos) {
@@ -87,7 +69,6 @@ public class searchPremium {
                 }
             }
         };
-
         Collections.sort(filtredVideos, comparator);
     }
 }

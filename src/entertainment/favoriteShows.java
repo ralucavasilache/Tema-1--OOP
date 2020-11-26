@@ -26,10 +26,9 @@ public class favoriteShows {
 
     public JSONObject execute(Writer fileWriter) throws IOException {
         addToFavorite();
-        if (sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if (sortType.equals("desc")) {
+            Collections.reverse(shows);
         }
         return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
@@ -40,21 +39,6 @@ public class favoriteShows {
             public int compare(final Show s1, final Show s2) {
                 if (s1.getFavorite() != s2.getFavorite()) {
                     return Integer.compare(s1.getFavorite(), s2.getFavorite());
-                } else {
-                    return 0;
-                }
-            }
-        };
-
-        Collections.sort(shows, comparator);
-    }
-
-    private void descsort() {
-        Comparator<Show> comparator = new Comparator<Show>() {
-            @Override
-            public int compare(final Show s1, final Show s2) {
-                if (s1.getFavorite() != s2.getFavorite()) {
-                    return Integer.compare(s2.getFavorite(), s1.getFavorite());
                 } else {
                     return 0;
                 }

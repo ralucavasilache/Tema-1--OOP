@@ -25,15 +25,12 @@ public class ratingMovie {
         this.sortType = sortType;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
-        if(sortType.equals("asc")) {
-            ascsort();
-        } else {
-            descsort();
+        ascsort();
+        if(sortType.equals("desc")) {
+            Collections.reverse(movies);
         }
-
         return fileWriter.writeFile(id, null,"Query result: " + filter());
     }
-
     private void ascsort() {
         Comparator<Movie> comparator = new Comparator<Movie>(){
             @Override
@@ -46,25 +43,7 @@ public class ratingMovie {
             }
         };
         Collections.sort(movies, comparator);
-//        for(Movie m : movies)
-//        System.out.println(m.getTitle() +"   " + m.calcAvg());
-        //sortasea aici e doar cresc atoate !
     }
-    private void descsort() {
-        Comparator<Movie> comparator = new Comparator<Movie>(){
-            @Override
-            public int compare(final Movie m1, final Movie m2){
-                if(m1.calcAvg() != m2.calcAvg()){
-                    return Double.compare( m2.calcAvg(), m1.calcAvg());
-                }else{
-                    return 0;
-                }
-            }
-        };
-        Collections.sort(movies, comparator);
-
-    }
-
     private List<String> filter() {
         int limit = 1;
         List<String> filteredMovies = new ArrayList<String>();

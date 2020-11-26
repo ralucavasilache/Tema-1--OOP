@@ -21,10 +21,9 @@ public class filterDescription {
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         setFilteredActors();
-        if (sortType.equals("asc")) {
-            ascSort();
-        } else {
-            descSort();
+        ascSort();
+        if(sortType.equals("desc")) {
+            Collections.reverse(filteredActors);
         }
         return fileWriter.writeFile(id, null, "Query result: " + filteredActors);
     }
@@ -49,28 +48,13 @@ public class filterDescription {
         Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(final String a1, final String a2) {
-                if (a1 != a2) {
+                if (!a1.equals(a2)) {
                     return a1.compareTo(a2);
                 } else {
                     return 0;
                 }
             }
         };
-
-        Collections.sort(filteredActors, comparator);
-    }
-    private void descSort() {
-        Comparator<String> comparator = new Comparator<String>() {
-            @Override
-            public int compare(final String a1, final String a2) {
-                if (a1 != a2) {
-                    return a2.compareTo(a1);
-                } else {
-                    return 0;
-                }
-            }
-        };
-
         Collections.sort(filteredActors, comparator);
     }
 }
