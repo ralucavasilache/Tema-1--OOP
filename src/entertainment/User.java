@@ -44,7 +44,7 @@ public class User {
     }
 
     public JSONObject View(String video, Writer fileWriter, int id) throws IOException {
-        JSONObject out = null;
+        JSONObject out;
         if(!history.containsKey(video)) {
             history.put(video, 1);
         }
@@ -74,7 +74,7 @@ public class User {
         return out;
     }
     public JSONObject setShowRating(Show show, double rating, Writer fileWriter, int season, int id) throws IOException {
-        JSONObject out = null;
+        JSONObject out;
         if(history.containsKey(show.getTitle())) {
             if (!show.getSeasons().get(season - 1).getRatings().containsKey(username)) {
                 show.setRating(rating, season, username);

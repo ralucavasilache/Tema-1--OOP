@@ -2,6 +2,7 @@ package entertainment;
 
 import fileio.Writer;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
@@ -71,22 +72,14 @@ public class mostViewedMovie {
         }
         return filteredMovies;
     }
-    void viewMovies() {
+    private void viewMovies() {
         for(User u : users) {
             for (Map.Entry<String,Integer> entry : u.getHistory().entrySet()) {
-                Movie m = searchMovie(entry.getKey());
+                Movie m = Utils.searchMovie(movies, entry.getKey());
                 if(m != null) {
                     m.setViews(entry.getValue());
                 }
             }
         }
-    }
-    public Movie searchMovie(String title) {
-        for(Movie m : movies) {
-            if(m.getTitle().equals(title)) {
-                return m;
-            }
-        }
-        return null;
     }
 }

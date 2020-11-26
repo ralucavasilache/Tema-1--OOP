@@ -2,6 +2,7 @@ package entertainment;
 
 import fileio.Writer;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class favoritePremium {
     public JSONObject execute(Writer fileWriter) throws IOException {
         addToFavorite();
         descSort();
-        User user = searchUser(username);
+        User user = Utils.searchUser(users, username);
         if (user.getSubscriptionType().equals("BASIC")) {
             return fileWriter.writeFile(id, null, "FavoriteRecommendation cannot be applied!");
         } else {
@@ -50,32 +51,16 @@ public class favoritePremium {
         };
         Collections.sort(videos, comparator);
     }
-    private User searchUser(String username) {
-        for(User u : users) {
-            if(u.getUsername().equals(username)) {
-                return  u;
-            }
-        }
-        return null;
-    }
     void addToFavorite() {
         for(User u : users) {
             if(!u.getUsername().equals(username)) {
                 for (String video : u.getFavoriteMovies()) {
-                    Video v = searchVideo(video);
+                    Video v = Utils.searchVideo(videos, video);
                     if (v != null) {
                         v.setFavorite(1);
                     }
                 }
             }
         }
-    }
-    public Video searchVideo(String title) {
-        for(Video v : videos) {
-            if(v.getTitle().equals(title)) {
-                return v;
-            }
-        }
-        return null;
     }
 }

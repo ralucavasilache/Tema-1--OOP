@@ -11,23 +11,19 @@ import java.util.List;
 
 public class searchPremium {
     private final int id;
-    private final List<User> users;
-    private final String username;
+    private final User user;
     private List<Video> videos;
     private final String filtre;
     private List<Video> filtredVideos = new ArrayList<Video>();
 
-    public searchPremium(List<Video> videos, int id, List<User> users, String username, String filtre) {
+    public searchPremium(List<Video> videos, int id, User user, String username, String filtre) {
         this.id = id;
-        this.users = users;
-        this.username = username;
+        this.user = user;
         this.filtre = filtre;
         this.videos = videos;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         filtreByGenre(filtre);
-
-        User user = searchUser(username);
 
         if (!user.getSubscriptionType().equals("BASIC") && filtredVideos.size() != 0) {
             ascSort();
@@ -41,17 +37,8 @@ public class searchPremium {
 
         }
     }
-    private User searchUser(String username) {
-        for(User u : users) {
-            if(u.getUsername().equals(username)) {
-                return  u;
-            }
-        }
-        return null;
-    }
     private void filtreByGenre (String genre) {
 
-        User user = searchUser(username);
         for(Video v : videos) {
             if(!user.getHistory().containsKey(v.getTitle()) && v.getGenres().contains(genre)) {
                 filtredVideos.add(v);

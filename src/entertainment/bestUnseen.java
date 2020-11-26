@@ -8,19 +8,16 @@ import java.util.*;
 
 public class bestUnseen {
     private final int id;
-    private final List<User> users;
-    private final String username;
+    private final User user;
     private List<Video> videos;
 
-    public bestUnseen(List<Video> videos, int id, List<User> users, String username) {
+    public bestUnseen(List<Video> videos, int id, User user, String username) {
         this.id = id;
-        this.users = users;
-        this.username = username;
+        this.user = user;
         this.videos = videos;
     }
     public JSONObject execute(Writer fileWriter) throws IOException {
         descSort();
-        User user = searchUser(username);
         for(Video v : videos) {
             if(!user.getHistory().containsKey(v.getTitle())) {
 
@@ -42,13 +39,5 @@ public class bestUnseen {
             }
         };
         Collections.sort(videos, comparator);
-    }
-    private User searchUser(String username) {
-        for(User u : users) {
-            if(u.getUsername().equals(username)) {
-                return  u;
-            }
-        }
-        return null;
     }
 }

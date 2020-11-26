@@ -2,6 +2,7 @@ package entertainment;
 
 import fileio.Writer;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
@@ -75,20 +76,11 @@ public class mostViewedShow {
     void viewShows() {
         for(User u : users) {
             for (Map.Entry<String,Integer> entry : u.getHistory().entrySet()) {
-                Show s = searchShow(entry.getKey());
+                Show s = Utils.searchShow(shows, entry.getKey());
                 if(s != null) {
                     s.setViews(entry.getValue());
                 }
             }
         }
-    }
-    public Show searchShow(String title) {
-        for(Show s : shows) {
-            if(s.getTitle().equals(title)) {
-                return s;
-            }
-
-        }
-        return null;
     }
 }

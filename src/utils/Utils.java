@@ -2,10 +2,7 @@ package utils;
 
 import actor.ActorsAwards;
 import common.Constants;
-import entertainment.Genre;
-import entertainment.Movie;
-import entertainment.Show;
-import entertainment.User;
+import entertainment.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -127,5 +124,36 @@ public final class Utils {
 
         return mapVideos;
     }
-
+    public static User searchUser(List<User> users, String username){
+        for(User u : users) {
+            if(u.getUsername().equals(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+    public static Movie searchMovie(List<Movie> movies, String title){
+        for (Movie m : movies) {
+            if (m.getTitle().equals(title)) {
+                return m;
+            }
+        }
+        return null;
+    }
+    public static Show searchShow(List<Show> shows, String title) {
+        for (Show s : shows) {
+            if (s.getTitle().equals(title)) {
+                return s;
+            }
+        }
+        return null;
+    }
+    public static Video searchVideo(List<Video> videos, String title) {
+        for(Video v : videos) {
+            if(v.getTitle().equals(title)) {
+                return v;
+            }
+        }
+        return null;
+    }
 }

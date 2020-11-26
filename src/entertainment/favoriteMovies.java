@@ -2,6 +2,7 @@ package entertainment;
 
 import fileio.Writer;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
@@ -72,19 +73,11 @@ public class favoriteMovies {
     void addToFavorite() {
         for(User u : users) {
             for (String movie : u.getFavoriteMovies()) {
-                Movie m = searchMovie(movie);
+                Movie m = Utils.searchMovie(movies, movie);
                 if(m != null) {
                     m.setFavorite(1);
                 }
             }
         }
-    }
-    public Movie searchMovie(String title) {
-        for(Movie m : movies) {
-            if(m.getTitle().equals(title)) {
-                return m;
-            }
-        }
-        return null;
     }
 }

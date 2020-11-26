@@ -7,6 +7,7 @@ import entertainment.*;
 import fileio.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -115,14 +116,16 @@ public final class Main {
         for(ActionInputData a: commands) {
             if (a.getActionType().equals("recommendation")) {
                 if (a.getType().equals("standard")) {
+                    User user = Utils.searchUser(myusers, a.getUsername());
                     List<Video> videos = createVideos(myMovies, myShows);
-                    standard s = new standard(videos, a.getActionId(), myusers, a.getUsername());
+                    standard s = new standard(videos, a.getActionId(), user, a.getUsername());
                     JSONObject out = s.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("best_unseen")) {
+                    User user = Utils.searchUser(myusers, a.getUsername());
                     List<Video> videos = createVideos(myMovies, myShows);
-                    bestUnseen b = new bestUnseen(videos, a.getActionId(), myusers, a.getUsername());
+                    bestUnseen b = new bestUnseen(videos, a.getActionId(), user, a.getUsername());
                     JSONObject out = b.execute(fileWriter);
                     arrayResult.add(out);
                 }
@@ -135,23 +138,26 @@ public final class Main {
                 }
                 else if (a.getType().equals("search")) {
                     String filtre = a.getGenre();
+                    User user = Utils.searchUser(myusers, a.getUsername());
                     List<Video> videos = createVideos(myMovies, myShows);
                     searchPremium f = new searchPremium(videos, a.getActionId(),
-                                                        myusers, a.getUsername(), filtre);
+                                                        user, a.getUsername(), filtre);
                     JSONObject out = f.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("popular")) {
                     List<Video> videos = createVideos(myMovies, myShows);
-                    popular p = new popular(videos, a.getActionId(), myusers, a.getUsername() );
+                    User user = Utils.searchUser(myusers, a.getUsername());
+                    popular p = new popular(videos, a.getActionId(), myusers, a.getUsername(), user);
                     JSONObject out = p.execute(fileWriter);
                     arrayResult.add(out);
 
                 }
             }
             else if (a.getActionType().equals("command")) {
-                Command command = new Command(a.getType(), a.getUsername(),a.getTitle(), a.getGrade(),
-                        a.getSeasonNumber(), a.getActionId(), myusers, myMovies, myShows, fileWriter);
+                User user = Utils.searchUser(myusers, a.getUsername());
+                Command command = new Command(a.getType(), user,a.getTitle(), a.getGrade(),
+                        a.getSeasonNumber(), a.getActionId(), myMovies, myShows, fileWriter);
                 JSONObject out = command.execute();
                 arrayResult.add(out);
             }
