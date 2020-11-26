@@ -1,6 +1,6 @@
-package Queries;
+package queries;
 
-import Entities.User;
+import entities.User;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 
@@ -16,15 +16,16 @@ public class NumberOfRatings {
     private final int id;
     private final String sortType;
 
-    public NumberOfRatings(List<User> users, int number, int id, String sortType) {
+    public NumberOfRatings(final List<User> users, final int number,
+                           final int id, final String sortType) {
         this.users = users;
         this.number = number;
         this.id = id;
         this.sortType = sortType;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+    public JSONObject execute(final Writer fileWriter) throws IOException {
         sortAsc();
-        if(sortType.equals("desc")) {
+        if (sortType.equals("desc")) {
             Collections.reverse(users);
         }
         return fileWriter.writeFile(id, null, "Query result: " + usersToPrint());
@@ -33,8 +34,8 @@ public class NumberOfRatings {
         int limit = 1;
 
         List<String> sortedUsers = new ArrayList<String>();
-        for(User u : users) {
-            if(u.getRatingsNo() != 0 && limit <= number) {
+        for (User u : users) {
+            if (u.getRatingsNo() != 0 && limit <= number) {
                 sortedUsers.add(u.getUsername());
                 limit++;
             }
@@ -43,7 +44,7 @@ public class NumberOfRatings {
     }
     private void sortAsc() {
         Comparator<User> comparator = (u1, u2) -> {
-            if(u1.getRatingsNo() != u2.getRatingsNo()) {
+            if (u1.getRatingsNo() != u2.getRatingsNo()) {
                 return u1.getRatingsNo() - u2.getRatingsNo();
             } else {
                 return u1.getUsername().compareTo(u2.getUsername());

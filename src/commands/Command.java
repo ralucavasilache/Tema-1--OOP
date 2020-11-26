@@ -1,8 +1,8 @@
-package Commands;
+package commands;
 
-import Entities.Movie;
-import Entities.Show;
-import Entities.User;
+import entities.Movie;
+import entities.Show;
+import entities.User;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 import utils.Utils;
@@ -14,15 +14,16 @@ public class Command {
     private final String type;
     private final String title;
     private final double rating;
-    private  final int seasonNo;
+    private final int seasonNo;
     private final int id;
     private final User user;
     private final List<Movie> movies;
     private final List<Show> shows;
     private final Writer fileWriter;
 
-    public Command (String type, User user, String title, double rating, int seasonNo, int id,
-                    List<Movie> movies, List<Show> shows, Writer fileWriter) {
+    public Command(final String type, final User user, final String title, final double rating,
+                   final int seasonNo, final int id, final List<Movie> movies,
+                   final List<Show> shows, final Writer fileWriter) {
         this.type = type;
         this.title = title;
         this.rating = rating;
@@ -34,39 +35,40 @@ public class Command {
         this.fileWriter = fileWriter;
 
     }
-
-    public JSONObject execute () throws IOException {
+    /**
+     * Executa, dupa caz, actiunile favorite,
+     * view si rating, prin apelul metodelor specifice
+     * @return un JSONObject
+     */
+    public JSONObject execute() throws IOException {
         JSONObject ret = null;
-        if(this.type.equals("favorite")) {
+        if (this.type.equals("favorite")) {
            ret =  this.favorite();
-        }
-        else if (this.type.equals("view")) {
+        } else if (this.type.equals("view")) {
             ret = this.view();
-        }
-        else if(this.type.equals("rating")){
+        } else if (this.type.equals("rating")) {
             ret = this.giveRating();
         }
         return ret;
     }
 
-    private JSONObject favorite () throws IOException {
-        JSONObject out = user.Favorite(this.title, fileWriter, this.id);
+    private JSONObject favorite() throws IOException {
+        JSONObject out = user.favorite(this.title, fileWriter, this.id);
         return out;
     }
 
-    private JSONObject view () throws IOException {
-        JSONObject out = user.View(this.title, fileWriter, this.id);
+    private JSONObject view() throws IOException {
+        JSONObject out = user.view(this.title, fileWriter, this.id);
         return out;
     }
 
-    private JSONObject giveRating () throws IOException {
+    private JSONObject giveRating() throws IOException {
         JSONObject out = null;
 
-        if(Utils.searchMovie(movies, title) != null) {
+        if (Utils.searchMovie(movies, title) != null) {
             Movie m = Utils.searchMovie(movies, title);
             out = user.setMovieRating(m, this.rating, fileWriter, id);
-        }
-        else if (Utils.searchShow(shows, title) != null) {
+        } else if (Utils.searchShow(shows, title) != null) {
             Show s = Utils.searchShow(shows, title);
             out = user.setShowRating(s, rating, fileWriter, seasonNo, id);
         }

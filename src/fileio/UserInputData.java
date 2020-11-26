@@ -53,11 +53,11 @@ public final class UserInputData {
 
     @Override
     public String toString() {
-        return "UserInputData{" +
-                "username='" + username + '\'' +
-                ", subscriptionType='" + subscriptionType + '\'' +
-                ", history=" + history +
-                ", favoriteMovies=" + favoriteMovies +
-                '}';
+        return "UserInputData{"
+                + "username='" + username + '\''
+                + ", subscriptionType='" + subscriptionType + '\''
+                + ", history=" + history
+                + ", favoriteMovies=" + favoriteMovies
+                + '}';
     }
 }

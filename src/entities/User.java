@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import fileio.Writer;
 import org.json.simple.JSONObject;
@@ -17,8 +17,9 @@ public class User {
     private final List<Show> shows;
     private int ratingsNo = 0;
 
-    public User(String username, String subscriptionType, Map<String,
-            Integer> history, ArrayList<String> favoriteMovies, List<Movie> movies, List<Show> shows) {
+    public User(final String username, final String subscriptionType, final Map<String,
+                Integer> history, final ArrayList<String> favoriteMovies,
+                final List<Movie> movies, final List<Show> shows) {
         this.username = username;
         this.subscriptionType = subscriptionType;
         this.history = history;
@@ -27,58 +28,60 @@ public class User {
         this.shows = shows;
     }
 
-    public JSONObject Favorite(String video, Writer fileWriter, int id) throws IOException {
+    public JSONObject favorite(final String video, final Writer fileWriter, final int id)
+                                throws IOException {
         JSONObject out = null;
-        if(history.containsKey(video) && !favoriteMovies.contains(video)) {
+        if (history.containsKey(video) && !favoriteMovies.contains(video)) {
             favoriteMovies.add(video);
             out = fileWriter.writeFile(id, null, "success -> " + video + " was added as favourite");
 
-        } else if(history.containsKey(video) && favoriteMovies.contains(video)) {
-            out = fileWriter.writeFile(id, null, "error -> " + video + " is already in favourite list");
-        }
-        else if (!history.containsKey(video)) {
+        } else if (history.containsKey(video) && favoriteMovies.contains(video)) {
+            out = fileWriter.writeFile(id, null, "error -> "
+                                        + video + " is already in favourite list");
+        } else if (!history.containsKey(video)) {
             out = fileWriter.writeFile(id, null, "error -> " + video + " is not seen");
         }
         return out;
     }
 
-    public JSONObject View(String video, Writer fileWriter, int id) throws IOException {
+    public JSONObject view(final String video, final Writer fileWriter, final int id) throws IOException {
         JSONObject out;
-        if(!history.containsKey(video)) {
+        if (!history.containsKey(video)) {
             history.put(video, 1);
-        }
-        else {
+        } else {
             history.put(video, history.get(video) + 1);
         }
         out = fileWriter.writeFile(id, null, "success -> " + video
-                                    +" was viewed with total views of " + history.get(video));
+                                    + " was viewed with total views of " + history.get(video));
         return out;
     }
 
-    public JSONObject setMovieRating(Movie movie, double rating, Writer fileWriter, int id) throws IOException {
+    public JSONObject setMovieRating(final Movie movie, final double rating,
+                                     final Writer fileWriter, final int id) throws IOException {
         JSONObject out = null;
-        if(history.containsKey(movie.getTitle())) {
-            if(!movie.getRating().containsKey(username)) {
+        if (history.containsKey(movie.getTitle())) {
+            if (!movie.getRating().containsKey(username)) {
                 movie.setRating(rating, username);
                 ratingsNo++;
-                return fileWriter.writeFile(id, null, "success -> " + movie.getTitle() +
-                                            " was rated with " + rating + " by " + username);
-            } else if(movie.getRating().containsKey(username)) {
+                return fileWriter.writeFile(id, null, "success -> " + movie.getTitle()
+                                            + " was rated with " + rating + " by " + username);
+            } else if (movie.getRating().containsKey(username)) {
                 out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle()
                                             + " has been already rated");
             }
-        } else if(!history.containsKey(movie.getTitle())) {
+        } else if (!history.containsKey(movie.getTitle())) {
             out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle() + " is not seen");
         }
         return out;
     }
-    public JSONObject setShowRating(Show show, double rating, Writer fileWriter, int season, int id) throws IOException {
+    public JSONObject setShowRating(final Show show, final double rating, final Writer fileWriter,
+                                    final int season, final int id) throws IOException {
         JSONObject out;
-        if(history.containsKey(show.getTitle())) {
+        if (history.containsKey(show.getTitle())) {
             if (!show.getSeasons().get(season - 1).getRatings().containsKey(username)) {
                 show.setRating(rating, season, username);
-                out = fileWriter.writeFile(id, null, "success -> " + show.getTitle() + " was rated with "
-                                            + rating + " by " + username);
+                out = fileWriter.writeFile(id, null, "success -> " + show.getTitle()
+                                            + " was rated with " + rating + " by " + username);
                 ratingsNo++;
             } else {
                 return fileWriter.writeFile(id, null, "error -> " + show.getTitle()
@@ -108,14 +111,5 @@ public class User {
     public int getRatingsNo() {
         return ratingsNo;
     }
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", subscriptionType='" + subscriptionType + '\'' +
-                ", history=" + history +
-                ", favoriteMovies=" + favoriteMovies +
-                ", ratingsNo=" + ratingsNo +
-                '}';
-    }
+
 }

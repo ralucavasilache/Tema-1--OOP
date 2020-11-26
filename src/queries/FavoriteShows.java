@@ -1,8 +1,10 @@
-package Queries;
+package queries;
 
-import Entities.Show;
+import entities.Show;
+import entities.User;
 import fileio.Writer;
 import org.json.simple.JSONObject;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,34 +12,40 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ratingShow {
+public class FavoriteShows {
     private final List<Show> shows;
     private final int id;
-    private  final int number;
+    private final int number;
     private final List<List<String>> filters;
     private final String sortType;
+    private final List<User> users;
 
-    public ratingShow (List<Show> show, int id, int number, List<List<String>> filters, String sortType) {
+    public FavoriteShows(final List<Show> shows, final int id, final int number,
+                         final List<List<String>> filters, final String sortType,
+                         final List<User> users) {
         this.shows = new ArrayList<>();
-        this.shows.addAll(show);
+        this.shows.addAll(shows);
         this.id = id;
         this.number = number;
         this.filters = filters;
         this.sortType = sortType;
+        this.users = users;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+
+    public JSONObject execute(final Writer fileWriter) throws IOException {
+        addToFavorite();
         ascsort();
-        if(sortType.equals("desc")) {
+        if (sortType.equals("desc")) {
             Collections.reverse(shows);
         }
-        return fileWriter.writeFile(id, null,"Query result: " + filter());
+        return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
 
     private void ascsort() {
         Comparator<Show> comparator = (s1, s2) -> {
-            if(s1.calcAvg() != s2.calcAvg()){
-                return Double.compare( s1.calcAvg(), s2.calcAvg());
-            }else{
+            if (s1.getFavorite() != s2.getFavorite()) {
+                return Integer.compare(s1.getFavorite(), s2.getFavorite());
+            } else {
                 return 0;
             }
         };
@@ -61,11 +69,21 @@ public class ratingShow {
                     }
                 }
             }
-            if (limit <= number && s.calcAvg() != 0 && found == true) {
+            if (limit <= number && s.getFavorite() != 0 && found) {
                 filteredShows.add(s.getTitle());
                 limit++;
             }
         }
         return filteredShows;
+    }
+    private void addToFavorite() {
+        for (User u : users) {
+            for (String show : u.getFavoriteMovies()) {
+                Show s = Utils.searchShow(shows, show);
+                if (s != null) {
+                    s.setFavorite(1);
+                }
+            }
+        }
     }
 }

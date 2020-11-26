@@ -1,7 +1,7 @@
-package Recommendation;
+package recommendation;
 
-import Entities.User;
-import Entities.Video;
+import entities.User;
+import entities.Video;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 import utils.Utils;
@@ -11,19 +11,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class favoritePremium {
+public class FavoritePremium {
     private final int id;
     private final List<User> users;
     private final String username;
     private List<Video> videos;
 
-    public favoritePremium(List<Video> videos, int id, List<User> users, String username) {
+    public FavoritePremium(final List<Video> videos, final int id,
+                           final List<User> users, final String username) {
         this.id = id;
         this.users = users;
         this.username = username;
         this.videos = videos;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+    public JSONObject execute(final Writer fileWriter) throws IOException {
         addToFavorite();
         descSort();
         User user = Utils.searchUser(users, username);
@@ -31,9 +32,10 @@ public class favoritePremium {
             return fileWriter.writeFile(id, null, "FavoriteRecommendation cannot be applied!");
         } else {
             for (Video v : videos) {
-                if (!user.getHistory().containsKey(v.getTitle()) && v.getFavorite()!= 0) {
+                if (!user.getHistory().containsKey(v.getTitle()) && v.getFavorite() != 0) {
 
-                    return fileWriter.writeFile(id, null, "FavoriteRecommendation result: " + v.getTitle());
+                    return fileWriter.writeFile(id, null, "FavoriteRecommendation result: "
+                                                + v.getTitle());
                 }
             }
             return fileWriter.writeFile(id, null, "FavoriteRecommendation cannot be applied!");
@@ -50,8 +52,8 @@ public class favoritePremium {
         Collections.sort(videos, comparator);
     }
     void addToFavorite() {
-        for(User u : users) {
-            if(!u.getUsername().equals(username)) {
+        for (User u : users) {
+            if (!u.getUsername().equals(username)) {
                 for (String video : u.getFavoriteMovies()) {
                     Video v = Utils.searchVideo(videos, video);
                     if (v != null) {

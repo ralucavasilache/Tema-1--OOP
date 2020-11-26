@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class Movie extends Video {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(final int views) {
         this.views += views;
     }
 
@@ -22,14 +22,11 @@ public class Movie extends Video {
         return favorite;
     }
 
-    public void setFavorite(int favorite) {
+    public void setFavorite(final int favorite) {
         this.favorite += favorite;
     }
 
-
-    private Map<String, Double> rating = new HashMap<String, Double>();
-
-
+    private final Map<String, Double> rating = new HashMap<String, Double>();
 
     public Movie(final String title, final ArrayList<String> cast,
                  final ArrayList<String> genres, final int year,
@@ -38,8 +35,8 @@ public class Movie extends Video {
         this.duration = duration;
     }
 
-    public void setRating(double rating, String user) {
-        this.rating.put(user, rating);
+    public void setRating(final double movieRating, final String user) {
+        this.rating.put(user, movieRating);
     }
 
     public int getDuration() {
@@ -55,21 +52,9 @@ public class Movie extends Video {
             avg += r;
 
         }
-        if(avg != 0) {
-            avg = avg/rating.size();
+        if (avg != 0) {
+            avg = avg / rating.size();
         }
-        //System.out.println(getTitle() + "  : " + avg);
         return avg;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" + "title= "
-                + super.getTitle() + "year= "
-                + super.getYear() + "duration= "
-                + duration + "cast {"
-                + super.getCast() + " }\n"
-                + "genres {" + super.getGenres() + " }\n "
-                + "ratings {" + rating + " }\n ";
     }
 }

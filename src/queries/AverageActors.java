@@ -1,8 +1,8 @@
-package Queries;
+package queries;
 
-import Entities.Actor;
-import Entities.Movie;
-import Entities.Show;
+import entities.Actor;
+import entities.Movie;
+import entities.Show;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class averageActors {
+public class AverageActors {
     private final List<Actor> actors;
     private final List<Movie> movies;
     private final List<Show> shows;
@@ -23,8 +23,9 @@ public class averageActors {
     private final String sortType;
     private final int id;
 
-    public averageActors(List<Actor> actors, String type, List<Movie> movies, List<Show> shows,
-                         int number, String sortType, int id) {
+    public AverageActors(final List<Actor> actors, final String type,
+                         final List<Movie> movies, final List<Show> shows,
+                         final int number, final String sortType, final int id) {
         this.actors = actors;
         this.objType = type;
         this.movies = movies;
@@ -34,11 +35,11 @@ public class averageActors {
         this.id = id;
 
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+    public JSONObject execute(final Writer fileWriter) throws IOException {
             parsingFilms();
             calcAvg();
             ascSort();
-            if(sortType.equals("desc")){
+            if (sortType.equals("desc")) {
                 Collections.reverse(actors);
             }
             return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
@@ -46,8 +47,8 @@ public class averageActors {
     private List<String> actorsToPrint() {
         int limit = 1;
         List<String> sortedActors = new ArrayList<String>();
-        for(Actor a : actors) {
-            if(a.getRating() != 0 && limit <= number) {
+        for (Actor a : actors) {
+            if (a.getRating() != 0 && limit <= number) {
                 sortedActors.add(a.getName());
                 limit++;
             }
@@ -55,21 +56,21 @@ public class averageActors {
         return sortedActors;
     }
     public void parsingFilms() {
-        for(Actor a: actors) {
+        for (Actor a: actors) {
             actorMovies = new ArrayList<>();
             actorShows = new ArrayList<>();
-            for(String film : a.getFilmography()) {
+            for (String film : a.getFilmography()) {
                 boolean found = false;
-                for(Movie m : movies) {
-                    if(m.getTitle().equals(film)) {
+                for (Movie m : movies) {
+                    if (m.getTitle().equals(film)) {
                         actorMovies.add(m);
                         found = true;
                         break;
                     }
                 }
-                if(!found) {
-                    for(Show s : shows) {
-                        if(s.getTitle().equals(film)) {
+                if (!found) {
+                    for (Show s : shows) {
+                        if (s.getTitle().equals(film)) {
                             actorShows.add(s);
                             break;
                         }
@@ -81,15 +82,15 @@ public class averageActors {
         }
     }
     private void calcAvg() {
-        for(Actor a: actors) {
+        for (Actor a: actors) {
             a.calculateRating();
         }
     }
     private void ascSort() {
         Comparator<Actor> comparator = (a1, a2) -> {
-            if(a1.getRating() != a2.getRating()){
-                return Double.compare( a1.getRating(), a2.getRating());
-            }else{
+            if (a1.getRating() != a2.getRating()) {
+                return Double.compare(a1.getRating(), a2.getRating());
+            } else {
                 return a1.getName().compareTo(a2.getName());
             }
         };

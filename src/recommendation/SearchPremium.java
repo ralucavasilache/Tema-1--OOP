@@ -1,7 +1,7 @@
-package Recommendation;
+package recommendation;
 
-import Entities.User;
-import Entities.Video;
+import entities.User;
+import entities.Video;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 
@@ -11,38 +11,39 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class searchPremium {
+public class SearchPremium {
     private final int id;
     private final User user;
     private List<Video> videos;
-    private final String filtre;
+    private final String filter;
     private List<Video> filtredVideos = new ArrayList<Video>();
 
-    public searchPremium(List<Video> videos, int id, User user, String username, String filtre) {
+    public SearchPremium(final List<Video> videos, final int id,
+                         final User user, final String filter) {
         this.id = id;
         this.user = user;
-        this.filtre = filtre;
+        this.filter = filter;
         this.videos = videos;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
-        filtreByGenre(filtre);
+    public JSONObject execute(final Writer fileWriter) throws IOException {
+        filtreByGenre(filter);
 
         if (!user.getSubscriptionType().equals("BASIC") && filtredVideos.size() != 0) {
             ascSort();
-            List<String> videostoprint = new ArrayList<String>();
-            for(Video v  : filtredVideos) {
-                videostoprint.add(v.getTitle());
+            List<String> videosToPrint = new ArrayList<String>();
+            for (Video v  : filtredVideos) {
+                videosToPrint.add(v.getTitle());
             }
-            return fileWriter.writeFile(id, null, "SearchRecommendation result: " + videostoprint);
+            return fileWriter.writeFile(id, null, "SearchRecommendation result: " + videosToPrint);
         } else {
             return fileWriter.writeFile(id, null, "SearchRecommendation cannot be applied!");
 
         }
     }
-    private void filtreByGenre (String genre) {
+    private void filtreByGenre(final String genre) {
 
-        for(Video v : videos) {
-            if(!user.getHistory().containsKey(v.getTitle()) && v.getGenres().contains(genre)) {
+        for (Video v : videos) {
+            if (!user.getHistory().containsKey(v.getTitle()) && v.getGenres().contains(genre)) {
                 filtredVideos.add(v);
             }
         }

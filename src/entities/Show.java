@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import entertainment.Season;
 
@@ -15,14 +15,14 @@ public class Show extends Video {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(final int views) {
         this.views += views;
     }
     public int getFavorite() {
         return favorite;
     }
 
-    public void setFavorite(int favorite) {
+    public void setFavorite(final int favorite) {
         this.favorite += favorite;
     }
     private final ArrayList<Season> seasons;
@@ -39,14 +39,14 @@ public class Show extends Video {
         setDuration();
     }
 
-    public void setRating(double rating, int season, String user) {
-       if(season <= numberOfSeasons) {
-           seasons.get(season-1).addRating(rating, user);
+    public void setRating(final double rating, final int season, final String user) {
+       if (season <= numberOfSeasons) {
+           seasons.get(season - 1).addRating(rating, user);
        }
 
     }
     private void setDuration() {
-        for(Season s : seasons) {
+        for (Season s : seasons) {
             this.duration += s.getDuration();
         }
     }
@@ -64,25 +64,12 @@ public class Show extends Video {
     }
     public double calcAvg() {
         double avg = 0;
-        for(Season s: seasons) {
+        for (Season s: seasons) {
             avg += s.calcAvg();
         }
-        if(avg != 0) {
-            avg = avg/numberOfSeasons;
+        if (avg != 0) {
+            avg = avg / numberOfSeasons;
         }
-        //System.out.println(getTitle() + "  : " + avg);
         return avg;
     }
-
-    @Override
-    public String toString() {
-        return "SerialInputData{" + " title= "
-                + super.getTitle() + " " + " year= "
-                + super.getYear() + " cast {"
-                + super.getCast() + " }\n" + " genres {"
-                + super.getGenres() + " }\n "
-                + " numberSeason= " + numberOfSeasons
-                + ", seasons=" + seasons + "\n\n" + '}';
-    }
-
 }

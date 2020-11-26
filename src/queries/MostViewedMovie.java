@@ -1,15 +1,19 @@
-package Queries;
+package queries;
 
-import Entities.Movie;
-import Entities.User;
+import entities.Movie;
+import entities.User;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 import utils.Utils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
-public class favoriteMovies {
+public class MostViewedMovie {
     private final List<Movie> movies;
     private final int id;
     private final int number;
@@ -17,7 +21,9 @@ public class favoriteMovies {
     private final String sortType;
     private final List<User> users;
 
-    public favoriteMovies(List<Movie> movie, int id, int number, List<List<String>> filters, String sortType, List<User> users) {
+    public MostViewedMovie(final List<Movie> movie, final int id, final int number,
+                           final List<List<String>> filters, final String sortType,
+                           final List<User> users) {
         this.movies = new ArrayList<>();
         this.movies.addAll(movie);
         this.id = id;
@@ -26,8 +32,9 @@ public class favoriteMovies {
         this.sortType = sortType;
         this.users = users;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
-        addToFavorite();
+
+    public JSONObject execute(final Writer fileWriter) throws IOException {
+        viewMovies();
         ascsort();
         if (sortType.equals("desc")) {
             Collections.reverse(movies);
@@ -36,23 +43,14 @@ public class favoriteMovies {
     }
     private void ascsort() {
         Comparator<Movie> comparator = (m1, m2) -> {
-            if (m1.getFavorite() != m2.getFavorite()) {
-                return Integer.compare(m1.getFavorite(), m2.getFavorite());
+            if (m1.getViews() != m2.getViews()) {
+                return Integer.compare(m1.getViews(), m2.getViews());
             } else {
                 return m1.getTitle().compareTo(m2.getTitle());
             }
         };
+
         Collections.sort(movies, comparator);
-    }
-    private void addToFavorite() {
-        for(User u : users) {
-            for (String movie : u.getFavoriteMovies()) {
-                Movie m = Utils.searchMovie(movies, movie);
-                if(m != null) {
-                    m.setFavorite(1);
-                }
-            }
-        }
     }
     private List<String> filter() {
         int limit = 1;
@@ -72,11 +70,21 @@ public class favoriteMovies {
                     }
                 }
             }
-            if (limit <= number && m.getFavorite() != 0 && found == true) {
+            if (limit <= number && m.getViews() != 0 && found) {
                 filteredMovies.add(m.getTitle());
                 limit++;
             }
         }
         return filteredMovies;
+    }
+    private void viewMovies() {
+        for (User u : users) {
+            for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
+                Movie m = Utils.searchMovie(movies, entry.getKey());
+                if (m != null) {
+                    m.setViews(entry.getValue());
+                }
+            }
+        }
     }
 }

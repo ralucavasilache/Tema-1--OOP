@@ -1,6 +1,6 @@
-package Queries;
+package queries;
 
-import Entities.Movie;
+import entities.Movie;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 
@@ -10,14 +10,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class longestMovie {
+public class LongestMovie {
     private final List<Movie> movies;
     private final int id;
     private  final int number;
     private final List<List<String>> filters;
     private final String sortType;
 
-    public longestMovie (List<Movie> movie, int id, int number, List<List<String>> filters, String sortType) {
+    public LongestMovie(final List<Movie> movie, final int id, final int number,
+                        final List<List<String>> filters, final String sortType) {
         this.movies = new ArrayList<>();
         this.movies.addAll(movie);
         this.id = id;
@@ -25,17 +26,17 @@ public class longestMovie {
         this.filters = filters;
         this.sortType = sortType;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+    public JSONObject execute(final Writer fileWriter) throws IOException {
         ascsort();
-        if(sortType.equals("desc")) {
+        if (sortType.equals("desc")) {
             Collections.reverse(movies);
         }
-        return fileWriter.writeFile(id, null,"Query result: " + filter());
+        return fileWriter.writeFile(id, null, "Query result: " + filter());
     }
     private void ascsort() {
         Comparator<Movie> comparator = (m1, m2) -> {
-            if(m1.getDuration() != m2.getDuration()){
-                return Integer.compare( m1.getDuration(), m2.getDuration());
+            if (m1.getDuration() != m2.getDuration()) {
+                return Integer.compare(m1.getDuration(), m2.getDuration());
             } else {
                 return m1.getTitle().compareTo(m2.getTitle());
             }
@@ -61,7 +62,7 @@ public class longestMovie {
                     }
                 }
             }
-            if (limit <= number && m.getDuration() != 0 && found == true) {
+            if (limit <= number && m.getDuration() != 0 && found) {
                 filteredMovies.add(m.getTitle());
                 limit++;
             }

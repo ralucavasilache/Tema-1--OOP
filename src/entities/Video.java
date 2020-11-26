@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public abstract class Video {
         return favorite;
     }
 
-    public void setFavorite(int favorite) {
+    public void setFavorite(final int favorite) {
         this.favorite += favorite;
     }
 
@@ -47,7 +47,7 @@ public abstract class Video {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(final int views) {
         this.views += views;
     }
 

@@ -1,27 +1,32 @@
-package Queries;
+package queries;
 
 import actor.ActorsAwards;
-import Entities.Actor;
+import entities.Actor;
 import fileio.Writer;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
-public class actorAwards {
+public class ActorAwards {
     private final List<Actor> actors;
     private final List<String> awards;
     private final int id;
     private final String sortType;
     private final List<Actor> filteredActors = new ArrayList<Actor>();
 
-    public  actorAwards(List<Actor> actors, List<String> awards, int id, String sortType) {
+    public ActorAwards(final List<Actor> actors, final List<String> awards,
+                       final int id, final String sortType) {
         this.actors = actors;
         this.awards = awards;
         this.id = id;
         this.sortType = sortType;
     }
-    public JSONObject execute(Writer fileWriter) throws IOException {
+    public JSONObject execute(final Writer fileWriter) throws IOException {
         setFilteredActors();
         ascsort();
 
@@ -31,22 +36,24 @@ public class actorAwards {
         return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
     }
     private void setFilteredActors() {
-        for(Actor a : actors) {
+        for (Actor a : actors) {
             boolean ok = findAwards(a);
-            if(ok == true) {
+            if (ok) {
                 filteredActors.add(a);
             }
         }
     }
-    private boolean findAwards(Actor actor) {
-        for(String award : awards) {
+    private boolean findAwards(final Actor actor) {
+        for (String award : awards) {
             boolean found = false;
-            for(Map.Entry<ActorsAwards, Integer> entry : actor.getAwards().entrySet()) {
-                if(entry.getKey().toString().equals(award)) {
+            for (Map.Entry<ActorsAwards, Integer> entry : actor.getAwards().entrySet()) {
+                if (entry.getKey().toString().equals(award)) {
                     found = true;
                 }
             }
-            if(found == false) return  false;
+            if (!found) {
+                return  false;
+            }
         }
         return true;
     }
@@ -62,7 +69,7 @@ public class actorAwards {
     }
     private List<String> actorsToPrint() {
         List<String> actorsToPrint = new ArrayList<String>();
-        for(Actor a : filteredActors) {
+        for (Actor a : filteredActors) {
             actorsToPrint.add(a.getName());
         }
         return actorsToPrint;

@@ -1,34 +1,33 @@
-package Queries;
+package queries;
 
-import Entities.Show;
-import Entities.User;
+import entities.Show;
 import fileio.Writer;
 import org.json.simple.JSONObject;
-import utils.Utils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-public class mostViewedShow {
+public class LongestShow {
     private final List<Show> shows;
     private final int id;
     private final int number;
     private final List<List<String>> filters;
     private final String sortType;
-    private final List<User> users;
 
-    public mostViewedShow(List<Show> shows, int id, int number, List<List<String>> filters, String sortType, List<User> users) {
+    public LongestShow(final List<Show> show, final int id, final int number,
+                       final List<List<String>> filters, final String sortType) {
         this.shows = new ArrayList<>();
-        this.shows.addAll(shows);
+        this.shows.addAll(show);
         this.id = id;
         this.number = number;
         this.filters = filters;
         this.sortType = sortType;
-        this.users = users;
     }
 
-    public JSONObject execute(Writer fileWriter) throws IOException {
-        viewShows();
+    public JSONObject execute(final Writer fileWriter) throws IOException {
         ascsort();
         if (sortType.equals("desc")) {
             Collections.reverse(shows);
@@ -38,15 +37,15 @@ public class mostViewedShow {
 
     private void ascsort() {
         Comparator<Show> comparator = (s1, s2) -> {
-            if (s1.getViews() != s2.getViews()) {
-                return Integer.compare(s1.getViews(), s2.getViews());
+            if (s1.getDuration() != s2.getDuration()) {
+                return Double.compare(s1.getDuration(), s2.getDuration());
             } else {
                 return s1.getTitle().compareTo(s2.getTitle());
             }
         };
-
         Collections.sort(shows, comparator);
     }
+
     private List<String> filter() {
         int limit = 1;
 
@@ -65,21 +64,11 @@ public class mostViewedShow {
                     }
                 }
             }
-            if (limit <= number && s.getViews() != 0 && found == true) {
+            if (limit <= number && s.getDuration() != 0 && found) {
                 filteredShows.add(s.getTitle());
                 limit++;
             }
         }
         return filteredShows;
-    }
-    void viewShows() {
-        for(User u : users) {
-            for (Map.Entry<String,Integer> entry : u.getHistory().entrySet()) {
-                Show s = Utils.searchShow(shows, entry.getKey());
-                if(s != null) {
-                    s.setViews(entry.getValue());
-                }
-            }
-        }
     }
 }

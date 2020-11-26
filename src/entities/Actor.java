@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import actor.ActorsAwards;
 
@@ -14,7 +14,7 @@ public  class Actor {
     private List<Movie> movies;
     private List<Show> shows;
     private double rating = 0;
-    private Map<ActorsAwards, Integer> awards;
+    private final Map<ActorsAwards, Integer> awards;
 
     public Actor(final String name, final String careerDescription,
                           final ArrayList<String> filmography,
@@ -29,27 +29,29 @@ public  class Actor {
         return rating;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(final List<Movie> movies) {
         this.movies = movies;
     }
+
     public int getAwardsNumber() {
         int awardsNumber = 0;
-        for(Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
+        for (Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
             awardsNumber += entry.getValue();
         }
         return awardsNumber;
     }
 
-    public void setShows(List<Show> shows) {
+    public void setShows(final List<Show> shows) {
         this.shows = shows;
     }
+
     public void calculateRating() {
         double avgM = 0;
         int mNumber = 0;
-        for(Movie m : movies) {
+        for (Movie m : movies) {
 
             double s = m.calcAvg();
-            if(s != 0) {
+            if (s != 0) {
                 avgM += s;
                 mNumber++;
 
@@ -57,15 +59,16 @@ public  class Actor {
         }
         double avgS = 0;
         int sNumber = 0;
-        for(Show s : shows) {
+        for (Show s : shows) {
             double sum = s.calcAvg();
-            if(sum != 0) {
+            if (sum != 0) {
                 avgS += sum;
                 sNumber++;
             }
         }
-        if(sNumber+mNumber != 0)
-            this.rating = (avgM + avgS)/(sNumber + mNumber);
+        if (sNumber + mNumber != 0) {
+            this.rating = (avgM + avgS) / (sNumber + mNumber);
+        }
     }
     public String getName() {
         return name;
@@ -95,12 +98,4 @@ public  class Actor {
         this.careerDescription = careerDescription;
     }
 
-    @Override
-    public String toString() {
-        return "ActorInputData{"
-                + "name='" + name + '\''
-                + ", careerDescription='"
-                + careerDescription + '\''
-                + ", filmography=" + filmography + '}';
-    }
 }

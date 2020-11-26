@@ -1,12 +1,12 @@
 package utils;
 
-import Entities.Movie;
-import Entities.Show;
-import Entities.User;
-import Entities.Video;
+import entertainment.Genre;
+import entities.Movie;
+import entities.Show;
+import entities.User;
+import entities.Video;
 import actor.ActorsAwards;
 import common.Constants;
-import entertainment.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -94,7 +94,7 @@ public final class Utils {
     /**
      * Transforms an array of JSON's into a map
      * @param jsonActors array of JSONs
-     * @return a map with ActorsAwardsa as key and Integer as value
+     * @return a map with ActorsAwards as key and Integer as value
      */
     public static Map<ActorsAwards, Integer> convertAwards(final JSONArray jsonActors) {
         Map<ActorsAwards, Integer> awards = new LinkedHashMap<>();
@@ -127,15 +127,15 @@ public final class Utils {
 
         return mapVideos;
     }
-    public static User searchUser(List<User> users, String username){
-        for(User u : users) {
-            if(u.getUsername().equals(username)) {
+    public static User searchUser(final List<User> users, final String username) {
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
                 return u;
             }
         }
         return null;
     }
-    public static Movie searchMovie(List<Movie> movies, String title){
+    public static Movie searchMovie(final List<Movie> movies, final String title) {
         for (Movie m : movies) {
             if (m.getTitle().equals(title)) {
                 return m;
@@ -143,7 +143,7 @@ public final class Utils {
         }
         return null;
     }
-    public static Show searchShow(List<Show> shows, String title) {
+    public static Show searchShow(final List<Show> shows, final String title) {
         for (Show s : shows) {
             if (s.getTitle().equals(title)) {
                 return s;
@@ -151,9 +151,9 @@ public final class Utils {
         }
         return null;
     }
-    public static Video searchVideo(List<Video> videos, String title) {
-        for(Video v : videos) {
-            if(v.getTitle().equals(title)) {
+    public static Video searchVideo(final List<Video> videos, final String title) {
+        for (Video v : videos) {
+            if (v.getTitle().equals(title)) {
                 return v;
             }
         }
