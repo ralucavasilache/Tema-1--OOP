@@ -1,9 +1,12 @@
 package main;
 
+import Commands.Command;
+import Entities.*;
+import Queries.*;
+import Recommendation.*;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import entertainment.*;
 import fileio.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -106,56 +108,49 @@ public final class Main {
                                         a.getAwards());
             myActors.add(newActor);
         }
-        List<User> myusers  = new ArrayList<User>();
+        List<User> myUsers  = new ArrayList<User>();
         for(UserInputData u : users) {
             User newUser = new User(u.getUsername(), u.getSubscriptionType(), u.getHistory(),
                                     u.getFavoriteMovies(), myMovies, myShows);
-            myusers.add(newUser);
+            myUsers.add(newUser);
         }
 
         for(ActionInputData a: commands) {
             if (a.getActionType().equals("recommendation")) {
+                User user = Utils.searchUser(myUsers, a.getUsername());
+                List<Video> videos = createVideos(myMovies, myShows);
                 if (a.getType().equals("standard")) {
-                    User user = Utils.searchUser(myusers, a.getUsername());
-                    List<Video> videos = createVideos(myMovies, myShows);
-                    standard s = new standard(videos, a.getActionId(), user, a.getUsername());
+
+                    standard s = new standard(videos, a.getActionId(), user);
                     JSONObject out = s.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("best_unseen")) {
-                    User user = Utils.searchUser(myusers, a.getUsername());
-                    List<Video> videos = createVideos(myMovies, myShows);
                     bestUnseen b = new bestUnseen(videos, a.getActionId(), user, a.getUsername());
                     JSONObject out = b.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("favorite")) {
-                    List<Video> videos = createVideos(myMovies, myShows);
                     favoritePremium f = new favoritePremium(videos, a.getActionId(),
-                                                            myusers, a.getUsername());
+                                                            myUsers, a.getUsername());
                     JSONObject out = f.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("search")) {
                     String filtre = a.getGenre();
-                    User user = Utils.searchUser(myusers, a.getUsername());
-                    List<Video> videos = createVideos(myMovies, myShows);
                     searchPremium f = new searchPremium(videos, a.getActionId(),
                                                         user, a.getUsername(), filtre);
                     JSONObject out = f.execute(fileWriter);
                     arrayResult.add(out);
                 }
                 else if (a.getType().equals("popular")) {
-                    List<Video> videos = createVideos(myMovies, myShows);
-                    User user = Utils.searchUser(myusers, a.getUsername());
-                    popular p = new popular(videos, a.getActionId(), myusers, a.getUsername(), user);
+                    popular p = new popular(videos, a.getActionId(), myUsers, a.getUsername(), user);
                     JSONObject out = p.execute(fileWriter);
                     arrayResult.add(out);
-
                 }
             }
             else if (a.getActionType().equals("command")) {
-                User user = Utils.searchUser(myusers, a.getUsername());
+                User user = Utils.searchUser(myUsers, a.getUsername());
                 Command command = new Command(a.getType(), user,a.getTitle(), a.getGrade(),
                         a.getSeasonNumber(), a.getActionId(), myMovies, myShows, fileWriter);
                 JSONObject out = command.execute();
@@ -181,7 +176,7 @@ public final class Main {
                         arrayResult.add(out);
                     }
                 } else if(a.getObjectType().equals("users")) {
-                    NumberOfRatings n = new NumberOfRatings(myusers, a.getNumber(), a.getActionId(), a.getSortType());
+                    NumberOfRatings n = new NumberOfRatings(myUsers, a.getNumber(), a.getActionId(), a.getSortType());
                     JSONObject out = n.execute(fileWriter);
                     arrayResult.add(out);
                 } else if(a.getObjectType().equals("movies")) {
@@ -197,12 +192,12 @@ public final class Main {
                         arrayResult.add(out);
                     } else if(a.getCriteria().equals("most_viewed")) {
                         mostViewedMovie m = new mostViewedMovie(myMovies, a.getActionId(),a.getNumber(),
-                                                                a.getFilters(), a.getSortType(), myusers);
+                                                                a.getFilters(), a.getSortType(), myUsers);
                         JSONObject out = m.execute(fileWriter);
                         arrayResult.add(out);
                     } else if(a.getCriteria().equals("favorite")) {
                         favoriteMovies m = new favoriteMovies(myMovies, a.getActionId(),a.getNumber(),
-                                                                a.getFilters(), a.getSortType(), myusers);
+                                                                a.getFilters(), a.getSortType(), myUsers);
                         JSONObject out = m.execute(fileWriter);
                         arrayResult.add(out);
                     }
@@ -219,12 +214,12 @@ public final class Main {
                         arrayResult.add(out);
                     } else if(a.getCriteria().equals("most_viewed")) {
                         mostViewedShow m = new mostViewedShow(myShows, a.getActionId(),a.getNumber(),
-                                                                a.getFilters(), a.getSortType(), myusers);
+                                                                a.getFilters(), a.getSortType(), myUsers);
                         JSONObject out = m.execute(fileWriter);
                         arrayResult.add(out);
                     } else if(a.getCriteria().equals("favorite")) {
                         favoriteShows m = new favoriteShows(myShows, a.getActionId(),a.getNumber(),
-                                                            a.getFilters(), a.getSortType(), myusers);
+                                                            a.getFilters(), a.getSortType(), myUsers);
                         JSONObject out = m.execute(fileWriter);
                         arrayResult.add(out);
                     }

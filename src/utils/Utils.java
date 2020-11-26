@@ -1,5 +1,9 @@
 package utils;
 
+import Entities.Movie;
+import Entities.Show;
+import Entities.User;
+import Entities.Video;
 import actor.ActorsAwards;
 import common.Constants;
 import entertainment.*;
@@ -100,7 +104,6 @@ public final class Utils {
                     Integer.parseInt(((JSONObject) iterator).get(Constants.NUMBER_OF_AWARDS)
                             .toString()));
         }
-
         return awards;
     }
 
