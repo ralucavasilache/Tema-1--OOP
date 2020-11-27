@@ -70,6 +70,9 @@ public final class Show extends Video {
     @Override
     public double calcAvg() {
         double avg = 0;
+        /**
+         * suma rating-urilor sezoanelor / numarul sezoanelor
+         */
         for (Season s: seasons) {
             avg += s.calcAvg();
         }

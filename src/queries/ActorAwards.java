@@ -101,7 +101,7 @@ public final class ActorAwards {
         filteredActors.sort(comparator);
     }
     /**
-     * Creeaza o lista finala cu numele actorilor care trebuie printati
+     * Creeaza lista finala cu numele actorilor care trebuie printati
      */
     private List<String> actorsToPrint() {
         List<String> actorsToPrint = new ArrayList<>();

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class FilterDescription {
+public final class FilterDescription {
     /**
      * Lista cu actorii din baza de date
      */

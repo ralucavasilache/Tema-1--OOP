@@ -1,38 +1,62 @@
-Object Oriented Programming Course
-Homework - VideosDB
+NUME: Vasilache Raluca
+GRUPA: 324CA
 
-November 2020
+				
+					Tema #1: VideosDB
 
-# Info
-https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
 
-# About the code
+	Descrierea solutiilor:
 
-We provide the input tests, the logic that parses them and the checker that runs them.
+	Idee: Fiecarei actiuni (mai putin comenzilor) ii va corespunde o clasa
+care nu va putea fi mostenita (final) in care vor fi grupate metodele necesare
+pentru finalizarea task-ului (sortari, cautari etc). Astfel clasele vor fi grupate
+in mai multe pachete, dupa cum urmeaza:
+	- action : ActionInterpreter contine metoda execute() care verifica din ce 
+categorie face parte fiecare comanda si, in continuare, apeleaza metodele specifice,
+care vor trata toate cazurile existente. Aici se realizeaza si scrierea in JSONArray.
+	- commands : Commands recunoaste daca actiunea lansata de un utilizatr 
+este "rating", "favorite" sau "view" si apeleaza metodele care aplica comenzile,
+metode regasite in clasa User.
+	- entities : contine entitatile principale pe baza carora se realizeaza 
+actiunile (Actor, Movie, Show, User, Video).
+	- queries : cate o clasa corespunzatoare pentru fiecare actiune de tip query
+	- recommendation : cate o clasa corespunzatoare pentru fiecare actiune de tip 
+recommendation
+	- utils : in clasa Utils au fost adaugate cateva metode statice de search
+(searchUser, searchMovie, searchShow, searchVideo) pentru a evita codul duplicat,
+acestea fiind folosite foarte des.
+	
+	Incapsularea se realizeaza prin definirea unei metode publice execute()
+care va contine apeluri, in ordinea corecta, catre celelalte functii private care
+actioneaza in mod direct pe entitati precum actori, useri etc. Aceasta metoda 
+returneaza, in majoritatea cazurilor (exceptie: execute() ActionInterpreter), 
+un JSONObject care va fi adaugat la JSONArray in cadrul clasei ActionInterpreter,
+unde se fac apeluri catre toate metodele execute din celelalte clase.
+	
+	Sunt create entitati distincte de cele folosite pentru parsarea datelor (pachetul
+fileio) pentru ca sunt necesare noi functionalitati care vor ajuta la implementarea mai
+multor actiuni. De exemplu:
+	- User: se remarca metodele view, setMovieRating, setShowRating si favorite
+care au atat efect intern (modifica campurile din User : history, favorite), cat si extern
+(cand utilizatorul ofera un rating, vizualizeaza un video sau il adauga la favorite, 
+se actualizeaza si campurile din movie/show cu noile date).
+Acest este necesar pentru implementarea unor recommendations si queries precum favorite,
+most_viewed, rating etc.
+	- Movie si Show mostenesc clasa abstracta Video si contin metode noi precum
+calcAvg() (se foloseste pentru actiunile bazate pe rating : rating_movie, rating_show,
+average_actor etc.), dar si campuri noi precum duration, views, favorite care vor fi
+folositoare in actiuni precum: longest, most_viewed, favorite etc.
+	- Actor: am adaugat metode de calculare a numarului de premii primite si a 
+rating-ului, folositoare pentru actor_awards, average_actor etc.
 
-* test_db - contains the tests in JSON format
-* src
-   * checker - the checker's sources including the checkstyle necessary files, not to be modified
-   * fileio - classes for parsing the input files, not to be modified
-   * common, utils
-        * contain utility classes with constants and static methods
-        * you can add your own functionality in the existing classes or add new classes as well
-   * actor
-        * contains an enum for the types of awards an actor can have - do not modify it
-        * you can add here your actor related classes
-   * entertainment
-        * contains an enum for the supported video genres - do not modify it
-        * class for representing a Season of a tv show - do not modify it
-        * you can add here your entertainment related classes
-
-We encourage you to organize your implementation in packages based on the functionality their classes offer. Try to keep
-your code modular, readable and documented.
-
-# Testing
-
-The Main class runs the checker on your implementation. Add the entry point to your implementation in it.
-
-Run Main to test your implementation from the IDE or from command line.
-
-Run the main method from Test class with the name of the input file from the command line and the result will be written
-to the out.txt file. Thus, you can compare this result with ref.
+	Deoarece majoritatea campurilor si metodelor necesare sunt integrate in clasele
+corespunzatoare entitatilor pe care opereaza, in clasele care reprezinta actiuni
+vom gasi, de cele mai multe ori, parcurgeri de liste si verificarea unor conditii,
+sortari (ex: LongestShow sortare care are ca prim criteriu durata si se foloseste
+de show.getDuration, si ca al doilea criteriu titlul) si filtrari (in urma
+filtrarilor se creeaza o lista cu un numar dat de obicte care indeplinesc
+cerintele actiunii: respecta un an, un gen, etc.; la lista se vor adauga doar obiecte
+care au  criteriul de sortare diferit de 0, de exemplu metoda filtre din LongestShow
+adauga in lista doar titlurile serialelor care nu au durata egala cu 0). Listele finale,
+impreuna cu mesajele aferente vor fi scrise intr-un JSONObject cu ajutorul obiectului
+fileWriter si returnate in ActionInterpreter, unde se realizeaza executia actiunii.

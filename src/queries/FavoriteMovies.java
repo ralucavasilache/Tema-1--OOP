@@ -57,7 +57,7 @@ public final class FavoriteMovies {
      */
     public JSONObject execute(final Writer fileWriter) throws IOException {
         setFavorite();
-        ascsort();
+        acsSort();
         if (sortType.equals("desc")) {
             Collections.reverse(movies);
         }
@@ -67,10 +67,10 @@ public final class FavoriteMovies {
      * Sorteaza filmele crescator dupa numarul de aparitii in listele
      * de favorite, apoi dupa nume.
      */
-    private void ascsort() {
+    private void acsSort() {
         Comparator<Movie> comparator = (m1, m2) -> {
             if (m1.getFavorite() != m2.getFavorite()) {
-                return Integer.compare(m1.getFavorite(), m2.getFavorite());
+                return m1.getFavorite() - m2.getFavorite();
             } else {
                 return m1.getTitle().compareTo(m2.getTitle());
             }

@@ -10,7 +10,7 @@ import utils.Utils;
 import java.io.IOException;
 import java.util.List;
 
-public class Command {
+public final class Command {
     private final String type;
     private final String title;
     private final double rating;
@@ -37,7 +37,7 @@ public class Command {
     }
     /**
      * Executa, dupa caz, actiunile favorite,
-     * view si rating, prin apelul metodelor specifice
+     * view si rating, prin apelul metodelor specifice.
      * @return un JSONObject
      */
     public JSONObject execute() throws IOException {
@@ -48,15 +48,24 @@ public class Command {
             default -> null;
         };
     }
-
+    /**
+     * Apeleaza metoda favorite din user.
+     * @return un JSONObject
+     */
     private JSONObject favorite() throws IOException {
         return user.favorite(this.title, fileWriter, this.id);
     }
-
+    /**
+     * Apeleaza metoda view din user.
+     * @return un JSONObject
+     */
     private JSONObject view() throws IOException {
         return user.view(this.title, fileWriter, this.id);
     }
-
+    /**
+     * Apeleaza metoda setMovieRating sau setShowRating din user.
+     * @return un JSONObject
+     */
     private JSONObject giveRating() throws IOException {
         JSONObject out = null;
 
@@ -64,6 +73,7 @@ public class Command {
             Movie m = Utils.searchMovie(movies, title);
             assert m != null;
             out = user.setMovieRating(m, this.rating, fileWriter, id);
+
         } else if (Utils.searchShow(shows, title) != null) {
             Show s = Utils.searchShow(shows, title);
             assert s != null;

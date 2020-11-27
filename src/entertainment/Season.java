@@ -45,7 +45,7 @@ public final class Season {
     }
     /**
      * Adauga o pereche (username, rating) in map-ul ratings
-     * @param rating acordat
+     * @param rating rating-ul acordat
      * @param username numele utilizatorului care a acordat rating-ul
      */
     public void addRating(final double rating, final String username) {
@@ -57,6 +57,9 @@ public final class Season {
      */
     public double calcAvg() {
         double avg = 0;
+        /**
+         * suma rating-urilor primite de sezon / numarul lor
+         */
         for (double r : ratings.values()) {
             avg += r;
         }

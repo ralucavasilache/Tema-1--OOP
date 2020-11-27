@@ -91,15 +91,18 @@ public final class User {
                                      final Writer fileWriter, final int id) throws IOException {
         JSONObject out = null;
         if (history.containsKey(movie.getTitle())) {
+
             if (!movie.getRating().containsKey(username)) {
                 movie.setRating(rating, username);
                 ratingsNo++;
                 return fileWriter.writeFile(id, null, "success -> " + movie.getTitle()
                                             + " was rated with " + rating + " by " + username);
+
             } else if (movie.getRating().containsKey(username)) {
                 out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle()
                                             + " has been already rated");
             }
+
         } else if (!history.containsKey(movie.getTitle())) {
             out = fileWriter.writeFile(id, null, "error -> " + movie.getTitle() + " is not seen");
         }

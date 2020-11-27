@@ -64,7 +64,7 @@ public final class AverageActors {
             return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
     }
     /**
-     * Creeaza o lista finala cu numele actorilor care trebuie printati
+     * Creeaza lista finala cu numele actorilor care trebuie printati
      */
     private List<String> actorsToPrint() {
         int limit = 1;

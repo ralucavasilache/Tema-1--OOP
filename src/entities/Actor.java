@@ -9,7 +9,7 @@ import java.util.Map;
  * Informatii despre un actor
  * Metode specifice actorului
  */
-public  final class Actor {
+public final class Actor {
     /**
      * Numele actorului
      */
@@ -73,8 +73,8 @@ public  final class Actor {
     public void calculateRating() {
         double avgM = 0;
         int mNumber = 0;
+         // media filmelor in care a jucat
         for (Movie m : movies) {
-
             double s = m.calcAvg();
             if (s != 0) {
                 avgM += s;
@@ -84,6 +84,7 @@ public  final class Actor {
         }
         double avgS = 0;
         int sNumber = 0;
+         // media serialelor in care a jucat
         for (Show s : shows) {
             double sum = s.calcAvg();
             if (sum != 0) {
@@ -91,6 +92,7 @@ public  final class Actor {
                 sNumber++;
             }
         }
+         // media actorului
         if (sNumber + mNumber != 0) {
             this.rating = (avgM + avgS) / (sNumber + mNumber);
         }
