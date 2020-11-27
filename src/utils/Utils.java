@@ -127,6 +127,12 @@ public final class Utils {
 
         return mapVideos;
     }
+    /**
+     * Cauta un utilizator intr-o lista de utilizatori
+     * @param users lista de utilizatori
+     * @param username numele utilizatorului care trebuie cautat
+     * @return un utilizator
+     */
     public static User searchUser(final List<User> users, final String username) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
@@ -135,6 +141,12 @@ public final class Utils {
         }
         return null;
     }
+    /**
+     * Cauta un film intr-o lista de filme
+     * @param movies lista de filme
+     * @param title titlul filmului care trebuie cautat
+     * @return un film
+     */
     public static Movie searchMovie(final List<Movie> movies, final String title) {
         for (Movie m : movies) {
             if (m.getTitle().equals(title)) {
@@ -143,6 +155,12 @@ public final class Utils {
         }
         return null;
     }
+    /**
+     * Cauta un serial intr-o lista de seriale
+     * @param shows lista de seriale
+     * @param title titlul serialului care trebuie cautat
+     * @return un serial
+     */
     public static Show searchShow(final List<Show> shows, final String title) {
         for (Show s : shows) {
             if (s.getTitle().equals(title)) {
@@ -151,6 +169,12 @@ public final class Utils {
         }
         return null;
     }
+    /**
+     * Cauta un video intr-o lista de videoclipuri
+     * @param videos lista de videoclipuri
+     * @param title titlul videoclipului care trebuie cautat
+     * @return un video
+     */
     public static Video searchVideo(final List<Video> videos, final String title) {
         for (Video v : videos) {
             if (v.getTitle().equals(title)) {

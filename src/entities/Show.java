@@ -3,48 +3,49 @@ package entities;
 import entertainment.Season;
 
 import java.util.ArrayList;
-
-public class Show extends Video {
-
+/**
+ * Informatii despre un serial
+ * Metode specifice serialului
+ */
+public final class Show extends Video {
+    /**
+     * Numarul de sezoane
+     */
     private final int numberOfSeasons;
-    private int duration;
-    private int views = 0;
-    private int favorite = 0;
-
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(final int views) {
-        this.views += views;
-    }
-    public int getFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(final int favorite) {
-        this.favorite += favorite;
-    }
+    /**
+     * Lista de sezoane
+     */
     private final ArrayList<Season> seasons;
-
-
+    /**
+     * Durata tuturor sezoanelor, in minute
+     */
+    private int duration;
 
     public Show(final String title, final ArrayList<String> cast,
                 final ArrayList<String> genres,
                 final int numberOfSeasons, final ArrayList<Season> seasons,
                 final int year) {
+
         super(title, year, cast, genres);
         this.numberOfSeasons = numberOfSeasons;
         this.seasons = seasons;
         setDuration();
     }
-
-    public void setRating(final double rating, final int season, final String user) {
+    /**
+     * Adauga unui sezon un rating nou
+     * @param rating, rating-ul acordat
+     * @param season, numarul sezonului
+     * @param username, numele utilizatorului care a acordat rating-ul
+     */
+    public void addSeasonRating(final double rating, final int season, final String username) {
        if (season <= numberOfSeasons) {
-           seasons.get(season - 1).addRating(rating, user);
+           seasons.get(season - 1).addRating(rating, username);
        }
-
     }
+    /**
+     * Calculeaza si seteaza durata serialului,
+     * aceasta fiind egala cu suma duratelor sezoanelor
+     */
     private void setDuration() {
         for (Season s : seasons) {
             this.duration += s.getDuration();
@@ -62,6 +63,11 @@ public class Show extends Video {
     public ArrayList<Season> getSeasons() {
         return seasons;
     }
+    /**
+     * Calculeaza rating-ul mediu
+     * @return un double, reprezentand media rating-urilor
+     */
+    @Override
     public double calcAvg() {
         double avg = 0;
         for (Season s: seasons) {

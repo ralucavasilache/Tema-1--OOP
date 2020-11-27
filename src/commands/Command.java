@@ -41,25 +41,20 @@ public class Command {
      * @return un JSONObject
      */
     public JSONObject execute() throws IOException {
-        JSONObject ret = null;
-        if (this.type.equals("favorite")) {
-           ret =  this.favorite();
-        } else if (this.type.equals("view")) {
-            ret = this.view();
-        } else if (this.type.equals("rating")) {
-            ret = this.giveRating();
-        }
-        return ret;
+            return switch (this.type) {
+            case "favorite" -> this.favorite();
+            case "view" -> this.view();
+            case "rating" -> this.giveRating();
+            default -> null;
+        };
     }
 
     private JSONObject favorite() throws IOException {
-        JSONObject out = user.favorite(this.title, fileWriter, this.id);
-        return out;
+        return user.favorite(this.title, fileWriter, this.id);
     }
 
     private JSONObject view() throws IOException {
-        JSONObject out = user.view(this.title, fileWriter, this.id);
-        return out;
+        return user.view(this.title, fileWriter, this.id);
     }
 
     private JSONObject giveRating() throws IOException {
@@ -67,9 +62,11 @@ public class Command {
 
         if (Utils.searchMovie(movies, title) != null) {
             Movie m = Utils.searchMovie(movies, title);
+            assert m != null;
             out = user.setMovieRating(m, this.rating, fileWriter, id);
         } else if (Utils.searchShow(shows, title) != null) {
             Show s = Utils.searchShow(shows, title);
+            assert s != null;
             out = user.setShowRating(s, rating, fileWriter, seasonNo, id);
         }
         return out;

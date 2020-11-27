@@ -8,30 +8,57 @@ import utils.Utils;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Popular {
+public final class Popular {
+    /**
+     * Id-ul actiunii
+     */
     private final int id;
+    /**
+     * Lista cu utilizatorii din baza de date
+     */
     private final List<User> users;
+    /**
+     * Numele utilizatorului care face actiunea
+     */
     private final User user;
+    /**
+     * Lista de videoclipuri din baza de date
+     */
     private final List<Video> videos;
+    /**
+     * Map, cheia - genul, valoarea - numarul de video care apartin acelui gen
+     */
     private final Map<String, Integer> genres = new HashMap<>();
+    /**
+     * Array cu toate genurile care pot fi intalnite
+     */
     private final String[] genreEnum = {"TV Movie", "Drama", "Fantasy", "Comedy", "Family", "War",
             "Sci-Fi & Fantasy", "Crime", "Animation", "Science Fiction",
             "Action", "Horror", "Mystery", "Western", "Adventure",
             "Action & Adventure", "Romance", "Thriller", "Kids", "History"};
+    /**
+     * Lista cu genurile sortate in functie de popularitate
+     */
     private List<String> genresRanking;
+
     public Popular(final List<Video> videos, final int id,
                    final List<User> users, final User user) {
+
         this.id = id;
         this.users = users;
         this.user = user;
         this.videos = videos;
     }
+    /**
+     * Executa recomandarea popular, prin apelul metodelor corespunzatoare
+     * @param fileWriter, obiect Writer ce va scrie mesajul rezultat in urma actiunii
+     * @return JSONObject
+     */
     public JSONObject execute(final Writer fileWriter) throws IOException {
         viewVideo();
         setGenres();
@@ -42,7 +69,10 @@ public class Popular {
             return fileWriter.writeFile(id, null, "PopularRecommendation result: " + findUnseen());
         }
     }
-    void viewVideo() {
+    /**
+     * Actualizeaza campul view pentru toate filmele care apar istoric la useri.
+     */
+    private void viewVideo() {
         for (User u : users) {
             for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
                 Video v = Utils.searchVideo(videos, entry.getKey());
@@ -52,6 +82,10 @@ public class Popular {
             }
         }
     }
+    /**
+     * Calculeaza numarul de video din fiecare gen si actualizeaza valoarea
+     * din map
+     */
     private void setGenres() {
         for (String genre : genreEnum) {
             genres.put(genre, 0);
@@ -62,6 +96,10 @@ public class Popular {
             }
         }
     }
+    /**
+     * Gaseste primul video nevizualizat din cel mai popular gen
+     * @return numele videoclipului gasit
+     */
     private String findUnseen() {
         int i = 0;
         while (i < genresRanking.size()) {
@@ -75,9 +113,13 @@ public class Popular {
         }
         return null;
     }
+    /**
+     * Sorteaza map-ul pe baza popularitatii genurilor si salveaza lista
+     * de genuri sortate in genresRanking
+     */
     private void sortByPopularity() {
         genresRanking = genres.entrySet().stream()
-                .sorted(Comparator.comparing(Map.Entry::getValue))
+                .sorted(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
             Collections.reverse(genresRanking);

@@ -12,19 +12,40 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FilterDescription {
+    /**
+     * Lista cu actorii din baza de date
+     */
     private  final List<Actor> actors;
+    /**
+     * Lista de cuvinte dupa care se face filtrarea
+     */
     private final List<String> keywords;
+    /**
+     * Tipul sortarii
+     */
     private final String sortType;
+    /**
+     * Id-ul actiunii
+     */
     private final int id;
-    private List<String> filteredActors = new ArrayList<String>();
+    /**
+     * Lista cu actorii care respecta filtrele
+     */
+    private final List<String> filteredActors = new ArrayList<>();
 
     public FilterDescription(final List<Actor> actors, final List<String> keywords,
                              final String sortType, final int id) {
+
         this.actors = actors;
         this.keywords = keywords;
         this.sortType = sortType;
         this.id = id;
     }
+    /**
+     * Executa actiunea filter_description, prin apelul metodelor corespunzatoare
+     * @param fileWriter, obiect Writer ce va scrie mesajul rezultat in urma actiunii
+     * @return JSONObject
+     */
     public JSONObject execute(final Writer fileWriter) throws IOException {
         setFilteredActors();
         ascSort();
@@ -33,6 +54,9 @@ public class FilterDescription {
         }
         return fileWriter.writeFile(id, null, "Query result: " + filteredActors);
     }
+    /**
+     * Adauga in lista filteredActors actorii care respecta filtrul.
+     */
     private void setFilteredActors() {
         for (Actor a: actors) {
             String description = a.getCareerDescription().replaceAll("[^A-Za-z0-9]", " ");
@@ -51,6 +75,9 @@ public class FilterDescription {
             }
         }
     }
+    /**
+     * Sorteaza actorii crescator nume.
+     */
     private void ascSort() {
         Comparator<String> comparator = (a1, a2) -> {
             if (!a1.equals(a2)) {
@@ -59,6 +86,6 @@ public class FilterDescription {
                 return 0;
             }
         };
-        Collections.sort(filteredActors, comparator);
+        filteredActors.sort(comparator);
     }
 }

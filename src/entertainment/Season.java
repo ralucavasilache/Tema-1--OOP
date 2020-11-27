@@ -18,14 +18,14 @@ public final class Season {
      */
     private int duration;
     /**
-     * List of ratings for each season
+     * Map of ratings for each season
      */
     private Map<String, Double> ratings;
 
     public Season(final int currentSeason, final int duration) {
         this.currentSeason = currentSeason;
         this.duration = duration;
-        this.ratings = new HashMap<String, Double>();
+        this.ratings = new HashMap<>();
     }
 
     public int getDuration() {
@@ -43,11 +43,18 @@ public final class Season {
     public void setRatings(final Map<String, Double> ratings) {
         this.ratings = ratings;
     }
-
-    public void addRating(final double rating, final String user) {
-        ratings.put(user, rating);
+    /**
+     * Adauga o pereche (username, rating) in map-ul ratings
+     * @param rating acordat
+     * @param username numele utilizatorului care a acordat rating-ul
+     */
+    public void addRating(final double rating, final String username) {
+        ratings.put(username, rating);
     }
-
+    /**
+     * Calculeaza media rating-urilor primite de un sezon
+     * @return un double, reprezentand media
+     */
     public double calcAvg() {
         double avg = 0;
         for (double r : ratings.values()) {

@@ -3,30 +3,20 @@ package entities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-public class Movie extends Video {
-
+/**
+ * Informatii despre un film
+ * Metode specifice filmului
+ */
+public final class Movie extends Video {
+    /**
+     * Durata filmului in minute
+     */
     private final int duration;
-    private int views = 0;
-    private int favorite = 0;
-
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(final int views) {
-        this.views += views;
-    }
-
-    public int getFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(final int favorite) {
-        this.favorite += favorite;
-    }
-
-    private final Map<String, Double> rating = new HashMap<String, Double>();
+    /**
+     * Map pentru rating-urile primite
+     * cheia - username, valoarea - rating
+     */
+    private final Map<String, Double> rating = new HashMap<>();
 
     public Movie(final String title, final ArrayList<String> cast,
                  final ArrayList<String> genres, final int year,
@@ -34,9 +24,13 @@ public class Movie extends Video {
         super(title, year, cast, genres);
         this.duration = duration;
     }
-
-    public void setRating(final double movieRating, final String user) {
-        this.rating.put(user, movieRating);
+    /**
+     * Adauga o pereche (username, rating) in map-ul de rating
+     * @param movieRating, rating acordat
+     * @param username, numele urilizatorului care a acordat rating-ul
+     */
+    public void setRating(final double movieRating, final String username) {
+        this.rating.put(username, movieRating);
     }
 
     public int getDuration() {
@@ -45,12 +39,15 @@ public class Movie extends Video {
     public Map<String, Double> getRating() {
         return rating;
     }
-
+    /**
+     * Calculeaza rating-ul mediu
+     * @return un double, reprezentand media rating-urilor
+     */
+    @Override
     public double calcAvg() {
         double avg = 0;
         for (double r : rating.values()) {
             avg += r;
-
         }
         if (avg != 0) {
             avg = avg / rating.size();

@@ -12,22 +12,36 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AverageActors {
+public final class AverageActors {
+    /**
+     * Lista de actori
+     */
     private final List<Actor> actors;
+    /**
+     * Lista de filme
+     */
     private final List<Movie> movies;
+    /**
+     * Lista de seriale
+     */
     private final List<Show> shows;
-    private List<Movie> actorMovies;
-    private List<Show> actorShows;
-    private final String objType;
+    /**
+     * Numarul maxim de actori care trebuie afisati
+     */
     private final int number;
+    /**
+     * Tipul de sortare
+     */
     private final String sortType;
+    /**
+     * Id-ul actiunii
+     */
     private final int id;
 
-    public AverageActors(final List<Actor> actors, final String type,
+    public AverageActors(final List<Actor> actors,
                          final List<Movie> movies, final List<Show> shows,
                          final int number, final String sortType, final int id) {
         this.actors = actors;
-        this.objType = type;
         this.movies = movies;
         this.shows = shows;
         this.number = number;
@@ -35,6 +49,11 @@ public class AverageActors {
         this.id = id;
 
     }
+    /**
+     * Executa actiunea average_actors, prin apelul metodelor corespunzatoare
+     * @param fileWriter, obiect Writer ce va scrie mesajul rezultat in urma actiunii
+     * @return JSONObject
+     */
     public JSONObject execute(final Writer fileWriter) throws IOException {
             parsingFilms();
             calcAvg();
@@ -44,9 +63,12 @@ public class AverageActors {
             }
             return fileWriter.writeFile(id, null, "Query result: " + actorsToPrint());
     }
+    /**
+     * Creeaza o lista finala cu numele actorilor care trebuie printati
+     */
     private List<String> actorsToPrint() {
         int limit = 1;
-        List<String> sortedActors = new ArrayList<String>();
+        List<String> sortedActors = new ArrayList<>();
         for (Actor a : actors) {
             if (a.getRating() != 0 && limit <= number) {
                 sortedActors.add(a.getName());
@@ -55,10 +77,14 @@ public class AverageActors {
         }
         return sortedActors;
     }
-    public void parsingFilms() {
+    /**
+     * Stabileste daca titlurile din filmografia fiecarui actor
+     * apartin unui film sau serial
+     */
+    private void parsingFilms() {
         for (Actor a: actors) {
-            actorMovies = new ArrayList<>();
-            actorShows = new ArrayList<>();
+            List<Movie> actorMovies = new ArrayList<>();
+            List<Show> actorShows = new ArrayList<>();
             for (String film : a.getFilmography()) {
                 boolean found = false;
                 for (Movie m : movies) {
@@ -81,11 +107,17 @@ public class AverageActors {
             a.setShows(actorShows);
         }
     }
+    /**
+     * Calculeaza rating-ul pentru fiecare actor
+     */
     private void calcAvg() {
         for (Actor a: actors) {
             a.calculateRating();
         }
     }
+    /**
+     * Sorteaza actorii crescator dupa rating, apoi dupa nume
+     */
     private void ascSort() {
         Comparator<Actor> comparator = (a1, a2) -> {
             if (a1.getRating() != a2.getRating()) {
@@ -94,6 +126,6 @@ public class AverageActors {
                 return a1.getName().compareTo(a2.getName());
             }
         };
-        Collections.sort(actors, comparator);
+        actors.sort(comparator);
     }
 }

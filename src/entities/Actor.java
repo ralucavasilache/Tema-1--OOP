@@ -5,15 +5,39 @@ import actor.ActorsAwards;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-public  class Actor {
-
-    private String name;
-    private String careerDescription;
-    private ArrayList<String> filmography;
+/**
+ * Informatii despre un actor
+ * Metode specifice actorului
+ */
+public  final class Actor {
+    /**
+     * Numele actorului
+     */
+    private final String name;
+    /**
+     * Descrierea carierei actorului
+     */
+    private final String careerDescription;
+    /**
+     * Titlurile filmelor/serialelor in care a jucat
+     */
+    private final ArrayList<String> filmography;
+    /**
+     * Lista filmelor in care  jucat
+     */
     private List<Movie> movies;
+    /**
+     * Lista serialelor in care  jucat
+     */
     private List<Show> shows;
+    /**
+     * Ratingul calculat
+     */
     private double rating = 0;
+    /**
+     * Map pentru premiile castigate
+     * cheia - numele premiului, valoarea - numarul
+     */
     private final Map<ActorsAwards, Integer> awards;
 
     public Actor(final String name, final String careerDescription,
@@ -25,26 +49,27 @@ public  class Actor {
         this.awards = awards;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
     public void setMovies(final List<Movie> movies) {
         this.movies = movies;
     }
 
-    public int getAwardsNumber() {
+    public void setShows(final List<Show> shows) {
+        this.shows = shows;
+    }
+    /**
+     * Calculeaza numarul total de premii primite
+     * @return un int, numarul premiilor
+     */
+    public int calcAwardsNumber() {
         int awardsNumber = 0;
         for (Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
             awardsNumber += entry.getValue();
         }
         return awardsNumber;
     }
-
-    public void setShows(final List<Show> shows) {
-        this.shows = shows;
-    }
-
+    /**
+     * Calculeaza si seteaza ratingul
+     */
     public void calculateRating() {
         double avgM = 0;
         int mNumber = 0;
@@ -74,16 +99,8 @@ public  class Actor {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public ArrayList<String> getFilmography() {
         return filmography;
-    }
-
-    public void setFilmography(final ArrayList<String> filmography) {
-        this.filmography = filmography;
     }
 
     public Map<ActorsAwards, Integer> getAwards() {
@@ -94,8 +111,7 @@ public  class Actor {
         return careerDescription;
     }
 
-    public void setCareerDescription(final String careerDescription) {
-        this.careerDescription = careerDescription;
+    public double getRating() {
+        return rating;
     }
-
 }
